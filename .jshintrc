@@ -18,6 +18,7 @@
     "trailing": true,
     "smarttabs": true,
     "laxcomma" : true,
+    "expr" : true,
     "predef": [
         "define",
         "require",
@@ -27,6 +28,7 @@
         "_gaq",
         "spyOn",
         "afterEach",
+        "ok",
         "console",
         "beforeEach",
         "before",

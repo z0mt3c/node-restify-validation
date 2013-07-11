@@ -1,34 +1,32 @@
 var restify = require('restify');
 var _ = require('underscore');
 
-var onError = function(errors, req, res, next) {
+module.exports.handleErrors = function(errors, req, res, next) {
     return res.send(400, { status: "validation failed", errors: errors });
 };
 
-var processValidation = function(validationModel, req) {
+module.exports.processValidation = function(validationModel, req) {
     return [{ foo: "bar", bar: "foo"}];
 };
 
 var defaultOptions = {
     /* every parameter without validation will be removed from the request */
-    strict: false,
-
-    /* hooks */
-    onError: onError
+    strict: false
 };
 
-module.exports = function (options) {
+module.exports.validationPlugin = function(options) {
     options = _.extend(defaultOptions, options);
+    var self = this;
 
     return function (req, res, next) {
-        var validationModel = req.route.validation;
+        var validationModel = req.route ? req.route.validation : undefined;
 
         if (validationModel) {
             // validate
-            var errors = processValidation(validationModel, req);
+            var errors = self.processValidation(validationModel, req);
 
             if (errors && _.isArray(errors) && errors.length > 0) {
-                return options.onError(errors, req, res, next);
+                return self.handleErrors(errors, req, res, next);
             }
         }
 
