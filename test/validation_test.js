@@ -122,7 +122,6 @@ describe('Validation', function () {
             errors1.length.should.equal(1);
 
             validationReq = { params: { name: '127.0.0.1' } };
-
             var errors2 = index.validation.process(validationModel, validationReq, validationOptions);
             errors2.length.should.equal(0);
 
