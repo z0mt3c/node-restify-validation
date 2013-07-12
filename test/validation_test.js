@@ -74,12 +74,12 @@ describe('Validation', function () {
         it('validationChainStore by routeName', function (done) {
             var generationSpy = sinon.spy(index.validation, '_generateValidationChain');
 
-            var validatorChainAsObject = index.validation.getValidatorChain(null, { myTestValidator: true, msg: testFunction1 },  null, myTestRequest, null);
+            var validatorChainAsObject = index.validation.getValidatorChain(null, { myTestValidator: true, msg: testFunction1 },  null, null, myTestRequest, null);
             validatorChainAsObject.length.should.equal(1);
             validatorChainAsObject[0].fn.should.equal(testFunction1);
             validatorChainAsObject[0].msg.should.equal(testFunction1);
 
-            var validatorChainAsObject2 = index.validation.getValidatorChain(null, { myTestValidator: true, msg: testFunction1 },  null, myTestRequest, null);
+            var validatorChainAsObject2 = index.validation.getValidatorChain(null, { myTestValidator: true, msg: testFunction1 },  null, null, myTestRequest, null);
             validatorChainAsObject2.length.should.equal(1);
             validatorChainAsObject2[0].fn.should.equal(testFunction1);
             validatorChainAsObject2[0].msg.should.equal(testFunction1);
