@@ -26,7 +26,6 @@ describe('Validation', function () {
         it('ignore validator key', function () {
             index.validation._ignoredValidationKeys.indexOf(myIgnoredTextKey).should.not.equal(-1);
             var validatorChainAsObject = index.validation.getValidatorChain(null, { myIgnoredTextKey: testFunction1 }, null, null, null);
-            console.log(validatorChainAsObject);
             validatorChainAsObject.length.should.equal(0);
         });
 
