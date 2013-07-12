@@ -91,4 +91,42 @@ describe('Validation', function () {
             done();
         });
     });
+
+    describe('validate', function () {
+        it('min', function(done) {
+            var validationModel = { name: { isRequired: true, min: 10 } },
+                validationReq = { params: { name: 9 } },
+                validationOptions = null;
+
+            var errors = index.validation.process(validationModel, validationReq, validationOptions);
+            errors.length.should.equal(1);
+
+            validationReq = { params: { name: 10 } };
+
+            var errors2 = index.validation.process(validationModel, validationReq, validationOptions);
+            errors2.length.should.equal(0);
+
+            done();
+        });
+
+        it('isIPv4', function(done) {
+            var validationModel = { name: { isRequired: true, isIPv4: false } },
+                validationReq = { params: { name: 9 } },
+                validationOptions = null;
+
+            var errors0 = index.validation.process(validationModel, validationReq, validationOptions);
+            errors0.length.should.equal(0);
+
+            validationModel.name.isIPv4 = true;
+            var errors1 = index.validation.process(validationModel, validationReq, validationOptions);
+            errors1.length.should.equal(1);
+
+            validationReq = { params: { name: '127.0.0.1' } };
+
+            var errors2 = index.validation.process(validationModel, validationReq, validationOptions);
+            errors2.length.should.equal(0);
+
+            done();
+        });
+    });
 });

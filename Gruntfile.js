@@ -6,7 +6,7 @@ module.exports = function (grunt) {
     grunt.initConfig({
         mochacli: {
             options: {
-                reporter: 'spec'
+                reporter: 'dot'
             },
             all: ['test/{,*/}*.js']
         },

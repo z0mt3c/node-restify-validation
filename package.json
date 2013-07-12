@@ -25,6 +25,7 @@
     "dependencies": {
         "restify": "2.6.0",
         "underscore": "1.5.1",
+        "underscore.string": "2.2.0-rc",
         "validator": "1.3.0"
     },
     "devDependencies": {
