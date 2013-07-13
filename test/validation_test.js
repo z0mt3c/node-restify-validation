@@ -10,13 +10,13 @@ var myTestRequest = { route: { name: myIgnoredTextKey }};
 
 describe('Validation', function () {
     describe('getValidatorChain', function () {
-        before(function() {
+        before(function () {
             index.validation._validators.myTestValidator = testFunction1;
             index.validation._validators.myTestValidator2 = testFunction2;
             index.validation._ignoredValidationKeys.push(myIgnoredTextKey);
         });
 
-        after(function() {
+        after(function () {
             delete index.validation._validators.myTestValidator;
             delete index.validation._validators.myTestValidator2;
             index.validation._ignoredValidationKeys.splice(index.validation._ignoredValidationKeys.indexOf(myIgnoredTextKey), 1);
@@ -35,7 +35,9 @@ describe('Validation', function () {
             validatorChainAsObject[0].fn.should.equal(testFunction1);
             validatorChainAsObject[0].msg.should.equal(testFunction1);
 
-            var validatorChainAsArray = index.validation.getValidatorChain(null, [{ myTestValidator: true, msg: testFunction1 }], null, null, null);
+            var validatorChainAsArray = index.validation.getValidatorChain(null, [
+                { myTestValidator: true, msg: testFunction1 }
+            ], null, null, null);
             validatorChainAsArray.length.should.equal(1);
             validatorChainAsArray[0].fn.should.equal(testFunction1);
             validatorChainAsArray[0].msg.should.equal(testFunction1);
@@ -52,14 +54,20 @@ describe('Validation', function () {
             validatorChainAsObject[1].fn.should.equal(testFunction2);
             validatorChainAsObject[1].msg.should.equal(myIgnoredTextKey);
 
-            var validatorChainAsArray = index.validation.getValidatorChain(null, [{ myTestValidator: true, msg: testFunction1 }, { myTestValidator2: true, msg: false }], null, null, null);
+            var validatorChainAsArray = index.validation.getValidatorChain(null, [
+                { myTestValidator: true, msg: testFunction1 },
+                { myTestValidator2: true, msg: false }
+            ], null, null, null);
             validatorChainAsArray.length.should.equal(2);
             validatorChainAsArray[0].fn.should.equal(testFunction1);
             validatorChainAsArray[0].msg.should.equal(testFunction1);
             validatorChainAsArray[1].fn.should.equal(testFunction2);
             validatorChainAsArray[1].msg.should.equal(false);
 
-            var validatorChainAsArray2 = index.validation.getValidatorChain(null, [{ myTestValidator: true, msg: testFunction1 }, { myTestValidator2: true, myTestValidator: true, msg: false }], null, null, null);
+            var validatorChainAsArray2 = index.validation.getValidatorChain(null, [
+                { myTestValidator: true, msg: testFunction1 },
+                { myTestValidator2: true, myTestValidator: true, msg: false }
+            ], null, null, null);
             validatorChainAsArray2.length.should.equal(3);
             validatorChainAsArray2[0].fn.should.equal(testFunction1);
             validatorChainAsArray2[0].msg.should.equal(testFunction1);
@@ -74,12 +82,12 @@ describe('Validation', function () {
         it('validationChainStore by routeName', function (done) {
             var generationSpy = sinon.spy(index.validation, '_generateValidationChain');
 
-            var validatorChainAsObject = index.validation.getValidatorChain(null, { myTestValidator: true, msg: testFunction1 },  null, null, myTestRequest, null);
+            var validatorChainAsObject = index.validation.getValidatorChain(null, { myTestValidator: true, msg: testFunction1 }, null, null, myTestRequest, null);
             validatorChainAsObject.length.should.equal(1);
             validatorChainAsObject[0].fn.should.equal(testFunction1);
             validatorChainAsObject[0].msg.should.equal(testFunction1);
 
-            var validatorChainAsObject2 = index.validation.getValidatorChain(null, { myTestValidator: true, msg: testFunction1 },  null, null, myTestRequest, null);
+            var validatorChainAsObject2 = index.validation.getValidatorChain(null, { myTestValidator: true, msg: testFunction1 }, null, null, myTestRequest, null);
             validatorChainAsObject2.length.should.equal(1);
             validatorChainAsObject2[0].fn.should.equal(testFunction1);
             validatorChainAsObject2[0].msg.should.equal(testFunction1);
@@ -93,7 +101,7 @@ describe('Validation', function () {
     });
 
     describe('validate', function () {
-        it('min', function(done) {
+        it('min', function (done) {
             var validationModel = { name: { isRequired: true, min: 10 } },
                 validationReq = { params: { name: 9 } },
                 validationOptions = null;
@@ -109,7 +117,7 @@ describe('Validation', function () {
             done();
         });
 
-        it('isIPv4', function(done) {
+        it('isIPv4', function (done) {
             var validationModel = { name: { isRequired: true, isIPv4: false } },
                 validationReq = { params: { name: 9 } },
                 validationOptions = null;
@@ -124,6 +132,33 @@ describe('Validation', function () {
             validationReq = { params: { name: '127.0.0.1' } };
             var errors2 = index.validation.process(validationModel, validationReq, validationOptions);
             errors2.length.should.equal(0);
+
+            done();
+        });
+
+        it('example #1', function (done) {
+            var validationModel = {
+                status: { isRequired: true, isIn: ['foo', 'bar'], scope: 'query' },
+                email: { isRequired: false, isEmail: true, scope: 'query' },
+                age: { isRequired: true, isInt: true, scope: 'query' }
+            };
+            var validationReq = { params: {
+                'name': 'Timo',
+                'status': 'bar',
+                'email': 'my.email@gmail.com',
+                'age': '10',
+                'street': 'abcdefghij'
+            } };
+            var validationOptions = {};
+
+            var errors0 = index.validation.process(validationModel, validationReq, validationOptions);
+            errors0.length.should.equal(0);
+
+            /*
+            delete validationReq.params.email;
+            var errors1 = index.validation.process(validationModel, validationReq, validationOptions);
+            errors1.length.should.equal(0);
+            */
 
             done();
         });
