@@ -104,7 +104,7 @@ describe('Validation', function () {
         it('min', function (done) {
             var validationModel = { name: { isRequired: true, min: 10 } },
                 validationReq = { params: { name: 9 } },
-                validationOptions = null;
+                validationOptions = {};
 
             var errors = index.validation.process(validationModel, validationReq, validationOptions);
             errors.length.should.equal(1);
@@ -120,7 +120,7 @@ describe('Validation', function () {
         it('isIPv4', function (done) {
             var validationModel = { name: { isRequired: true, isIPv4: false } },
                 validationReq = { params: { name: 9 } },
-                validationOptions = null;
+                validationOptions = {};
 
             var errors0 = index.validation.process(validationModel, validationReq, validationOptions);
             errors0.length.should.equal(0);
