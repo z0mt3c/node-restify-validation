@@ -18,7 +18,11 @@
         "url": "https://github.com/z0mt3c/node-restify-validation/issues"
     },
     "scripts": {
-        "test": "grunt test"
+        "test": "grunt test",
+        "travis": "grunt travis",
+        "blanket": {
+            "pattern": "//^(?!.*node_modules.*$).*lib\//"
+        }
     },
     "main": "index",
     "readmeFilename": "README.md",
@@ -35,6 +39,7 @@
         "grunt-mocha-cli": "~1.0.1",
         "matchdep": "~0.1.1",
         "should": "~1.2.2",
-        "sinon": "~1.7.3"
+        "sinon": "~1.7.3",
+        "grunt-mocha-cov": "0.0.7"
     }
 }

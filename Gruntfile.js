@@ -26,10 +26,29 @@ module.exports = function (grunt) {
                 'test/*.js',
                 'index.js'
             ]
+        },
+        mochacov: {
+            coverage: {
+                options: {
+                    coveralls: {
+                        serviceName: 'travis-ci'
+                    }
+                }
+            },
+            test: {
+                options: {
+                    reporter: 'spec'
+                }
+            },
+            options: {
+                files: 'test/*.js',
+                require: ['should']
+            }
         }
     });
 
     // Default task.
-    grunt.registerTask('test', ['jshint', 'mochacli']);
+    grunt.registerTask('test', ['jshint', 'mochacli', 'mochacov:test']);
+    grunt.registerTask('travis', ['test','mochacov:coverage']);
     grunt.registerTask('default', ['test']);
 };
