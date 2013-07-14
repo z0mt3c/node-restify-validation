@@ -1,6 +1,6 @@
 node-restify-validation
 =======================
-Validation for REST Services built with node-restify in node.js
+Validation for REST Services built with [node-restify](https://github.com/mcavage/node-restify) in node.js
 
 [![Build Status](https://travis-ci.org/z0mt3c/node-restify-validation.png)](https://travis-ci.org/z0mt3c/node-restify-validation)
 [![Coverage Status](https://coveralls.io/repos/z0mt3c/node-restify-validation/badge.png?branch=master)](https://coveralls.io/r/z0mt3c/node-restify-validation?branch=master)
@@ -9,16 +9,14 @@ Validation for REST Services built with node-restify in node.js
 
 Simple request validation with node-restify
 -------------------------------------------
-Goal of this little project is to have the validation rules / schema on one hand as close to the route itself as possible without messing up the logic with further LOCs on the other hand.
+Goal of this little project is to have the validation rules / schema as close to the route itself as possible on one hand without messing up the logic with further LOCs on the other hand.
 
+Example:
 
     var server = restify.createServer();
     server.use(restify.queryParser());
     server.use(restifyValidation.validationPlugin( { errorsAsArray: false }));
     
-    /**
-     * Test Route
-     */
     server.get({url: '/test/:name', validation: {
         name: { isRequired: true, isIn: ['foo','bar'], scope: 'path' },
         status: { isRequired: true, isIn: ['foo','bar'], scope: 'query' },
@@ -26,6 +24,10 @@ Goal of this little project is to have the validation rules / schema on one hand
         age: { isRequired: true, isInt: true, scope: 'query' }
     }}, function (req, res, next) {
         res.send(req.params);
+    });
+    
+    server.listen(8001, function () {
+        console.log('%s listening at %s', server.name, server.url);
     });
 
 
