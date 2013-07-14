@@ -1,6 +1,7 @@
 var assert = require('assert');
 var should = require('should');
 var sinon = require('sinon');
+var _ = require('underscore');
 var index = require('../index');
 
 
@@ -16,15 +17,26 @@ var test = function (validatorName, validatorValue, correctValue, incorrectValue
     errors0[0].field.should.equal('myParameter');
     errors0[0].code.should.equal('MISSING');
 
-    validationReq.params.myParameter = correctValue;
-    var errors1 = index.validation.process(validationModel, validationReq, options);
-    errors1.length.should.equal(0);
+    if (!_.isArray(correctValue)) {
+        correctValue = [correctValue];
+    }
+    _.each(correctValue, function(value) {
+        validationReq.params.myParameter = value;
+        var errors1 = index.validation.process(validationModel, validationReq, options);
+        errors1.length.should.equal(0);
+    });
 
-    validationReq.params.myParameter = incorrectValue;
-    var errors2 = index.validation.process(validationModel, validationReq, options);
-    errors2.length.should.equal(1);
-    errors2[0].field.should.equal('myParameter');
-    errors2[0].code.should.equal('INVALID');
+    if (!_.isArray(incorrectValue)) {
+        incorrectValue = [incorrectValue];
+    }
+
+    _.each(incorrectValue, function(value) {
+        validationReq.params.myParameter = value;
+        var errors2 = index.validation.process(validationModel, validationReq, options);
+        errors2.length.should.equal(1);
+        errors2[0].field.should.equal('myParameter');
+        errors2[0].code.should.equal('INVALID');
+    });
 
     done();
 };
