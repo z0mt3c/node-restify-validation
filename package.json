@@ -19,7 +19,6 @@
     },
     "scripts": {
         "test": "grunt test",
-        "travis": "grunt travis",
         "blanket": {
             "pattern": "//^(?!.*node_modules.*$).*lib\//"
         }
