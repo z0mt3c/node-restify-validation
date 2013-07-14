@@ -142,6 +142,7 @@ describe('Validation', function () {
                 email: { isRequired: false, isEmail: true, scope: 'query' },
                 age: { isRequired: true, isInt: true, scope: 'query' }
             };
+
             var validationReq = { params: {
                 'name': 'Timo',
                 'status': 'bar',
@@ -149,16 +150,41 @@ describe('Validation', function () {
                 'age': '10',
                 'street': 'abcdefghij'
             } };
+
             var validationOptions = {};
 
             var errors0 = index.validation.process(validationModel, validationReq, validationOptions);
             errors0.length.should.equal(0);
 
-            /*
             delete validationReq.params.email;
             var errors1 = index.validation.process(validationModel, validationReq, validationOptions);
             errors1.length.should.equal(0);
-            */
+
+            delete validationReq.params.status;
+            var errors2 = index.validation.process(validationModel, validationReq, validationOptions);
+            errors2.length.should.equal(1);
+
+            done();
+        });
+
+
+        it('errorsAsArray / errorsAsObject', function (done) {
+            var validationReq = { params: { } };
+            var validationModel = {
+                status: { isRequired: true, isIn: ['foo', 'bar'], scope: 'query' }
+            };
+
+            var errors0 = index.validation.process(validationModel, validationReq, { errorsAsArray: false });
+            errors0.should.be.a('object');
+            errors0.status.should.exist;
+            errors0.status.field.should.equal('status');
+            errors0.status.code.should.equal('MISSING');
+
+            var errors1 = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+            errors1.should.be.an.instanceof(Array);
+            errors1.length.should.equal(1);
+            errors1[0].field.should.equal('status');
+            errors1[0].code.should.equal('MISSING');
 
             done();
         });
