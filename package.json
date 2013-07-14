@@ -23,7 +23,7 @@
             "pattern": "//^(?!.*node_modules.*$).*lib\//"
         }
     },
-    "main": "index",
+    "main": "lib/index",
     "readmeFilename": "README.md",
     "dependencies": {
         "underscore": "1.5.1",

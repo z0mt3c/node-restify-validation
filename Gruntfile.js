@@ -48,7 +48,7 @@ module.exports = function (grunt) {
     });
 
     // Default task.
-    grunt.registerTask('test', ['jshint', 'mochacli', 'mochacov:test']);
+    grunt.registerTask('test', ['jshint', 'mochacli']);
     grunt.registerTask('travis', ['test','mochacov:coverage']);
     grunt.registerTask('default', ['test']);
 };
