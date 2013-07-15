@@ -231,8 +231,6 @@ describe('Validation', function () {
             };
 
             validationModel.status.isRequired = false;
-            console.log(validationModel);
-
             var errors0 = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
             errors0.should.be.an.instanceof(Array);
             errors0.length.should.equal(0);
