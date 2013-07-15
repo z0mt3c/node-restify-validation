@@ -188,5 +188,39 @@ describe('Validation', function () {
 
             done();
         });
+
+        it('function as validation parameter', function (done) {
+            var isRequiredTrue, validationReq = { params: { } };
+            var options = { errorsAsArray: true };
+            var validationModelTrue = { status: { } };
+
+            isRequiredTrue = function () {
+                this.req.should.exist;
+                this.req.should.equal(validationReq);
+
+                this.validationModel.should.exist;
+                this.validationModel.should.equal(validationModelTrue);
+
+                this.validationRules.should.exist;
+                this.validationRules.should.equal(validationModelTrue.status);
+
+                this.options.should.exist;
+                this.options.should.equal(options);
+
+                return true;
+            };
+
+            validationModelTrue.status.isRequired = isRequiredTrue;
+            validationModelTrue.status.isIn = ['foo', 'bar'];
+            validationModelTrue.status.scope = 'query';
+
+            var errors1 = index.validation.process(validationModelTrue, validationReq, options);
+            errors1.should.be.an.instanceof(Array);
+            errors1.length.should.equal(1);
+            errors1[0].field.should.equal('status');
+            errors1[0].code.should.equal('MISSING');
+
+            done();
+        });
     });
 });
