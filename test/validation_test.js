@@ -237,5 +237,30 @@ describe('Validation', function () {
 
             done();
         });
+
+        it('validation equalTo', function (done) {
+            var validationReq = { params: { } };
+            var validationModel = {
+                a: { isRequired: true },
+                b: { equalTo: 'a' }
+            };
+
+            var errors0 = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+            errors0.length.should.equal(1);
+            errors0[0].field.should.equal('a');
+            errors0[0].code.should.equal('MISSING');
+
+            validationReq.params.a = 'abc';
+            errors0 = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+            errors0.length.should.equal(1);
+            errors0[0].field.should.equal('b');
+            errors0[0].code.should.equal('INVALID');
+
+            validationReq.params.b = 'abc';
+            errors0 = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+            errors0.length.should.equal(0);
+
+            done();
+        });
     });
 });

@@ -39,8 +39,8 @@ var test = function (validatorName, validatorValue, correctValue, incorrectValue
     });
 };
 
-describe('Integration test', function () {
-    it('equals', function () {
+describe('Validators', function () {
+    it('node-validator', function () {
         test('isEmail', true, 'test@email.de', 'asdfasdf.de');
         test('isUrl', true, 'http://www.google.de', 'asdfasdf');
         test('isIP', true, '127.0.0.1', 'asdf');
