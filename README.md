@@ -30,6 +30,12 @@ Example:
         console.log('%s listening at %s', server.name, server.url);
     });
 
+Use
+---
+Simply install it through npm
+
+    npm install node-restify-validation
+
 
 Documentation powered by swagger
 --------------------------------
