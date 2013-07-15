@@ -39,6 +39,47 @@ Demo project
 ------------
 A simple demo project can be cloned from [node-restify-demo](https://github.com/z0mt3c/node-restify-demo).
 
+Supported validations
+---------------------
+Powered by [node-validator](https://github.com/chriso/node-validator).
+
+    isRequired
+    contains
+    equals
+    is
+    isAfter
+    isAlpha
+    isAlphanumeric
+    isBefore
+    isCreditCard
+    isDate
+    isDecimal
+    isDivisibleBy
+    isEmail
+    isFloat
+    isHexColor
+    isHexadecimal
+    isIP
+    isIPNet
+    isIPv4
+    isIPv6
+    isIn
+    isInt
+    isLowercase
+    isNumeric
+    isUUID
+    isUUIDv3
+    isUUIDv4
+    isUppercase
+    isUrl
+    max
+    min
+    not
+    notContains
+    notIn
+    notRegex
+    regex
+
 Inspiration
 -----------
 node-restify-validation was & is inspired by [backbone.validation](https://github.com/thedersen/backbone.validation). 
