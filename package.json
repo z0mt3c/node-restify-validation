@@ -4,6 +4,7 @@
     "author": {
         "name": "Timo Behrmann"
     },
+    "license" : "MIT",
     "keywords": [
         "rest",
         "api",
