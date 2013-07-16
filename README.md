@@ -86,6 +86,12 @@ Powered by [node-validator](https://github.com/chriso/node-validator).
     notRegex
     regex
 
+Inspiration
+-----------
+node-restify-validation was & is inspired by [backbone.validation](https://github.com/thedersen/backbone.validation).
+In terms of validation node-restify-validation makes use of [node-validator](https://github.com/chriso/node-validator).
+
+
 License
 -------
 
@@ -111,10 +117,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-Inspiration
------------
-node-restify-validation was & is inspired by [backbone.validation](https://github.com/thedersen/backbone.validation). 
-In terms of validation node-restify-validation makes use of [node-validator](https://github.com/chriso/node-validator).
 
 
 
