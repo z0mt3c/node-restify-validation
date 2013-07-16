@@ -1,7 +1,11 @@
+/*
+ * Copyright (c) 2013 Timo Behrmann. All rights reserved.
+ */
+
 var assert = require('assert');
 var should = require('should');
 var sinon = require('sinon');
-var validation = require('../index');
+var validation = require('../lib/index');
 
 describe('Utils', function () {
     describe('flatten', function () {

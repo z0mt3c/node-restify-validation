@@ -1,8 +1,12 @@
+/*
+ * Copyright (c) 2013 Timo Behrmann. All rights reserved.
+ */
+
 var assert = require('assert');
 var should = require('should');
 var sinon = require('sinon');
 var _ = require('underscore');
-var index = require('../index');
+var index = require('../lib/index');
 
 
 var test = function (validatorName, validatorValue, correctValue, incorrectValue) {

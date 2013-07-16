@@ -1,4 +1,8 @@
-var index = require('../index');
+/*
+ * Copyright (c) 2013 Timo Behrmann. All rights reserved.
+ */
+
+var index = require('../lib/index');
 var sinon = require('sinon');
 
 var options = {};

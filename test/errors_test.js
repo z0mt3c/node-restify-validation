@@ -1,7 +1,11 @@
+/*
+ * Copyright (c) 2013 Timo Behrmann. All rights reserved.
+ */
+
 var assert = require('assert');
 var should = require('should');
 var sinon = require('sinon');
-var index = require('../index');
+var index = require('../lib/index');
 
 describe('Errors', function () {
     it('handle errors object', function (done) {
