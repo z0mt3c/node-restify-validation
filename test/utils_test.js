@@ -33,5 +33,21 @@ describe('Utils', function () {
             beforeFlattend.should.equal(afterFlattend);
             done();
         });
+
+        it('de-flatting', function (done) {
+            var origin = {
+                foo: {
+                    ooo: 'bar',
+                    bar: 1337,
+                    faa: true,
+                    have: { a: 'look' }
+                },
+                test: 1
+            };
+
+            var remake = JSON.stringify(validation.utils.deflat(validation.utils.flatten(origin)));
+            remake.should.equal(JSON.stringify(origin));
+            done();
+        });
     });
 });
