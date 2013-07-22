@@ -86,6 +86,41 @@ Powered by [node-validator](https://github.com/chriso/node-validator).
     notRegex
     regex
 
+
+Conditional validations
+-----------------------
+All validation parameters are able to deal with functions as parameters.
+
+For instance the parameterMatches-Condition:
+
+    module.exports.paramMatches = function (param, value) {
+        if (_.isArray(value)) {
+            return function() {
+                return _.contains(value, this.req.params[param]);
+            };
+        } else {
+            return function() {
+                return _.isEqual(value, this.req.params[param]);
+            };
+        }
+    };
+
+Which will be used for instance as follows:
+
+    var validation = isRequired: require('node-restify-vaidation');
+    ...
+    parameter: { isRequired: validation.when.paramMatches('param1', ['a', 'b']) }
+
+As result the parameter will only be required when param1 matches a or b. The called method will have a context (this) containing the following information:
+
+* req: the request object
+* validationModel: the complete validation model
+* validationRules: the validationRules for the current atribute
+* options: the options which have initially been passed
+* params: flattend request parameters
+* recentErrors: errors which have been computed until now
+
+
 Inspiration
 -----------
 node-restify-validation was & is inspired by [backbone.validation](https://github.com/thedersen/backbone.validation).
