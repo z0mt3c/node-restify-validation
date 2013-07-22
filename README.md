@@ -1,5 +1,4 @@
-node-restify-validation
-=======================
+# node-restify-validation
 Validation for REST Services built with [node-restify](https://github.com/mcavage/node-restify) in node.js
 
 [![Build Status](https://travis-ci.org/z0mt3c/node-restify-validation.png)](https://travis-ci.org/z0mt3c/node-restify-validation)
@@ -7,8 +6,7 @@ Validation for REST Services built with [node-restify](https://github.com/mcavag
 [![Dependency Status](https://gemnasium.com/z0mt3c/node-restify-validation.png)](https://gemnasium.com/z0mt3c/node-restify-validation)
 
 
-Simple request validation with node-restify
--------------------------------------------
+## Simple request validation with node-restify
 Goal of this little project is to have the validation rules / schema as close to the route itself as possible on one hand without messing up the logic with further LOCs on the other hand.
 
 Example:
@@ -30,26 +28,25 @@ Example:
         console.log('%s listening at %s', server.name, server.url);
     });
 
-Use
----
+## Use
 Simply install it through npm
 
     npm install node-restify-validation
 
 
-Documentation powered by swagger
---------------------------------
+## Documentation powered by swagger
 On top of the validation schema the [node-restify-swagger](https://github.com/z0mt3c/node-restify-swagger) library should later-on generate the swagger resources to provide a hands-on documentation. 
 
-Demo project
-------------
+## Demo project
 A simple demo project can be cloned from [node-restify-demo](https://github.com/z0mt3c/node-restify-demo).
 
-Supported validations
----------------------
+## Supported validations
+
+    isRequired: true | function()
+    equalTo: {'fieldName'}
+
 Powered by [node-validator](https://github.com/chriso/node-validator).
 
-    isRequired
     contains
     equals
     is
@@ -87,8 +84,7 @@ Powered by [node-validator](https://github.com/chriso/node-validator).
     regex
 
 
-Conditional validations
------------------------
+## Conditional validations
 All validation parameters are able to deal with functions as parameters.
 
 For instance the parameterMatches-Condition:
@@ -121,15 +117,12 @@ As result the parameter will only be required when param1 matches a or b. The ca
 * recentErrors: errors which have been computed until now
 
 
-Inspiration
------------
+## Inspiration
 node-restify-validation was & is inspired by [backbone.validation](https://github.com/thedersen/backbone.validation).
 In terms of validation node-restify-validation makes use of [node-validator](https://github.com/chriso/node-validator).
 
 
-License
--------
-
+## License
 The MIT License (MIT)
 
 Copyright (c) 2013 Timo Behrmann
