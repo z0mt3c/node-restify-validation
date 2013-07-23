@@ -4,6 +4,11 @@ module.exports = function (grunt) {
 
     // Project configuration.
     grunt.initConfig({
+        release: {
+            options: {
+                tagName: 'v<%= version %>'
+            }
+        },
         mochacli: {
             options: {
                 reporter: 'dot'

@@ -4,7 +4,7 @@
     "author": {
         "name": "Timo Behrmann"
     },
-    "license" : "MIT",
+    "license": "MIT",
     "keywords": [
         "rest",
         "api",
@@ -21,7 +21,7 @@
     "scripts": {
         "test": "grunt test",
         "blanket": {
-            "pattern": "//^(?!.*node_modules.*$).*lib\//"
+            "pattern": "//^(?!.*node_modules.*$).*lib//"
         }
     },
     "main": "lib/index",
@@ -40,6 +40,7 @@
         "matchdep": "~0.1.1",
         "should": "~1.2.2",
         "sinon": "~1.7.3",
-        "grunt-mocha-cov": "0.0.7"
+        "grunt-mocha-cov": "0.0.7",
+        "grunt-release": "~0.3.5"
     }
 }
