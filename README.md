@@ -5,6 +5,10 @@ Validation for REST Services built with [node-restify](https://github.com/mcavag
 [![Coverage Status](https://coveralls.io/repos/z0mt3c/node-restify-validation/badge.png?branch=master)](https://coveralls.io/r/z0mt3c/node-restify-validation?branch=master)
 [![Dependency Status](https://gemnasium.com/z0mt3c/node-restify-validation.png)](https://gemnasium.com/z0mt3c/node-restify-validation)
 
+## Requirements
+* node-restify-validation requires at least restify 2.6.0 since the validation model is defined in the route-object. (https://github.com/mcavage/node-restify/pull/408)
+* Currently it is required to map all parameters to the "params-scope" through the mapParams-option, since all validations will be performed agains the req.params object. (TODO: scope sensitive validation)
+
 
 ## Simple request validation with node-restify
 Goal of this little project is to have the validation rules / schema as close to the route itself as possible on one hand without messing up the logic with further LOCs on the other hand.
