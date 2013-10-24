@@ -179,7 +179,7 @@ describe('Validation', function () {
             };
 
             var errors0 = index.validation.process(validationModel, validationReq, { errorsAsArray: false });
-            errors0.should.be.a('object');
+            errors0.should.have.type('object');
             errors0.status.should.exist;
             errors0.status.field.should.equal('status');
             errors0.status.code.should.equal('MISSING');

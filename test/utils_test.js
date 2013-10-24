@@ -10,7 +10,7 @@ var validation = require('../lib/index');
 describe('Utils', function () {
     describe('flatten', function () {
         it('flatten is available', function (done) {
-            validation.utils.flatten.should.be.a('function');
+            validation.utils.flatten.should.have.type('function');
             done();
         });
 

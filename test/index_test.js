@@ -16,8 +16,8 @@ var error = [
 
 describe('Plugin test', function () {
     it('Plugin is available', function (done) {
-        index.validationPlugin.should.be.a('function');
-        index.validationPlugin().should.be.a('function');
+        index.validationPlugin.should.have.type('function');
+        index.validationPlugin().should.have.type('function');
         done();
     });
 
