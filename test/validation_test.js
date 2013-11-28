@@ -7,8 +7,12 @@ var sinon = require('sinon');
 
 var options = {};
 var req = {};
-var testFunction1 = function () { return true; };
-var testFunction2 = function () { return false; };
+var testFunction1 = function () {
+    return true;
+};
+var testFunction2 = function () {
+    return false;
+};
 var myIgnoredTextKey = 'myIgnoredTestKey';
 var myTestRequest = { route: { name: myIgnoredTextKey }};
 
@@ -167,6 +171,29 @@ describe('Validation', function () {
             delete validationReq.params.status;
             var errors2 = index.validation.process(validationModel, validationReq, validationOptions);
             errors2.length.should.equal(1);
+
+            done();
+        });
+
+        it('multiple parameters', function (done) {
+            var validationModel = {
+                brand: { isRequired: false, multiple: true, scope: 'query', regex: /^[0-9a-fA-F]{24}$/, description: 'Return products from these brands. Can be declared multiple times.' }
+            };
+
+            var validationReq = {
+                params: {
+                    'brand': ['52249dcf5fea540000000004', '5224a2038cc1b0040200000f']
+                }
+            };
+
+            var validationOptions = {};
+
+            var errors0 = index.validation.process(validationModel, validationReq, validationOptions);
+            errors0.length.should.equal(0);
+
+            validationReq.params.brand.push('asdf');
+            var errors1 = index.validation.process(validationModel, validationReq, validationOptions);
+            errors1.length.should.equal(1);
 
             done();
         });
