@@ -88,4 +88,8 @@ describe('Validators', function () {
         test('isBefore', '2011-08-04', '2011-08-03', '2011-08-04');
         test('isAfter', '2011-08-04', '2011-08-05', '2011-08-04');
     });
+
+    it('node-validator arrays', function() {
+        test('isInt', true, '123', [['456', '0.123']]);
+    });
 });
