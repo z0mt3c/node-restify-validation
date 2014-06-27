@@ -128,7 +128,7 @@ describe('Validation', function () {
         it('isIPv4', function (done) {
             var validationModel = { name: { isRequired: true, isIPv4: false } },
                 validationReq = { params: { name: 9 } },
-                validationOptions = {};
+                validationOptions = { };
 
             var errors0 = index.validation.process(validationModel, validationReq, validationOptions);
             errors0.length.should.equal(0);
@@ -140,6 +140,22 @@ describe('Validation', function () {
             validationReq = { params: { name: '127.0.0.1' } };
             var errors2 = index.validation.process(validationModel, validationReq, validationOptions);
             errors2.length.should.equal(0);
+
+            done();
+        });
+
+        it('extendWithBody', function (done) {
+            var validationModel = { name: { isRequired: true, isIPv4: false } },
+                validationReq = { body: { name: 9 } },
+                validationOptions = { extendWithBody: true };
+
+            var errors0 = index.validation.process(validationModel, validationReq, validationOptions);
+            errors0.length.should.equal(0);
+
+            validationOptions.extendWithBody = false;
+
+            var errors1 = index.validation.process(validationModel, validationReq, validationOptions);
+            errors1.length.should.equal(1);
 
             done();
         });

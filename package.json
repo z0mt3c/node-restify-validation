@@ -27,20 +27,20 @@
   "main": "lib/index",
   "readmeFilename": "README.md",
   "dependencies": {
-    "underscore": "~1.5.2",
+    "lodash": "^2.4.1",
     "underscore.string": "~2.3.3",
     "validator": "~1.5.1"
   },
   "devDependencies": {
     "restify": ">=2.6.0",
     "grunt": "~0.4.1",
-    "grunt-contrib-jshint": "~0.7.0",
-    "grunt-contrib-watch": "~0.5.1",
-    "grunt-mocha-cli": "~1.3.0",
+    "grunt-contrib-jshint": "~0.10.0",
+    "grunt-contrib-watch": "~0.6.1",
+    "grunt-mocha-cli": "~1.9.0",
     "matchdep": "~0.3.0",
-    "should": "~2.0.2",
-    "sinon": "~1.7.3",
-    "grunt-mocha-cov": "~0.0.7",
-    "grunt-release": "~0.6.0"
+    "should": "~4.0.4",
+    "sinon": "~1.10.2",
+    "grunt-mocha-cov": "~0.2.1",
+    "grunt-release": "~0.7.0"
   }
 }
