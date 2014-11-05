@@ -1,6 +1,6 @@
 {
   "name": "node-restify-validation",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": {
     "name": "Timo Behrmann"
   },
@@ -28,8 +28,9 @@
   "readmeFilename": "README.md",
   "dependencies": {
     "lodash": "^2.4.1",
+    "node-restify-errors": "~0.1.0",
     "underscore.string": "~2.3.3",
-    "validator": "~3.16.1"
+    "validator": "~3.22.0"
   },
   "devDependencies": {
     "restify": ">=2.8.1",
