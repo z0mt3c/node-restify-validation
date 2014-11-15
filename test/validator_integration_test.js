@@ -77,6 +77,9 @@ describe('Validators', function () {
     it('node-validator isInt', function () {
         test('isInt', true, '123', 'a1');
     });
+    it('node-validator isNatural', function () {
+        test('isNatural', true, '123', 'a1');
+    });
     it('node-validator isLowercase', function () {
         test('isLowercase', true, 'abc', 'aBc');
     });
