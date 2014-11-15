@@ -1,9 +1,12 @@
 {
   "name": "node-restify-validation",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "author": {
     "name": "Timo Behrmann"
   },
+  "contributors": [
+    "Guillaume Chauvet"
+  ],
   "license": "MIT",
   "keywords": [
     "rest",
@@ -19,10 +22,7 @@
     "url": "https://github.com/z0mt3c/node-restify-validation/issues"
   },
   "scripts": {
-    "test": "grunt test",
-    "blanket": {
-      "pattern": "//^(?!.*node_modules.*$).*lib//"
-    }
+    "test": "mocha --recursive test"
   },
   "main": "lib/index",
   "readmeFilename": "README.md",
@@ -33,14 +33,8 @@
   },
   "devDependencies": {
     "restify": ">=2.8.1",
-    "grunt": "~0.4.5",
-    "grunt-contrib-jshint": "~0.10.0",
-    "grunt-contrib-watch": "~0.6.1",
-    "grunt-mocha-cli": "~1.10.0",
-    "matchdep": "~0.3.0",
-    "should": "~4.2.1",
-    "sinon": "~1.11.1",
-    "grunt-mocha-cov": "~0.3.0",
-    "grunt-release": "~0.7.0"
+    "mocha": "^2.0.1",
+    "sinon": "^1.11.1",
+    "should": "^4.3.0"
   }
 }
