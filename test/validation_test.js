@@ -129,7 +129,7 @@ describe('Validation', function () {
 
     describe('validate', function () {
         it('min', function (done) {
-            var validationModel = { params: { name: { isRequired: true, min: 10 } } },
+            var validationModel = { resources: { name: { isRequired: true, min: 10 } } },
                 validationReq = { params: { name: 9 } },
                 validationOptions = {};
 
@@ -145,14 +145,14 @@ describe('Validation', function () {
         });
 
         it('isIPv4', function (done) {
-            var validationModel = {params: { name: { isRequired: true, isIPv4: false } } },
+            var validationModel = { resources: { name: { isRequired: true, isIPv4: false } } },
                 validationReq = { params: { name: 9 } },
                 validationOptions = { };
 
             var errors0 = index.validation.process(validationModel, validationReq, validationOptions);
             errors0.length.should.equal(0);
 
-            validationModel.params.name.isIPv4 = true;
+            validationModel.resources.name.isIPv4 = true;
             var errors1 = index.validation.process(validationModel, validationReq, validationOptions);
             errors1.length.should.equal(1);
 
@@ -181,7 +181,7 @@ describe('Validation', function () {
 
         it('example #1', function (done) {
             var validationModel = {
-                params: {
+                resources: {
                     status: { isRequired: true, isIn: ['foo', 'bar'], scope: 'query' },
                     email: { isRequired: false, isEmail: true, scope: 'query' },
                     age: { isRequired: true, isInt: true, scope: 'query' }
@@ -213,7 +213,7 @@ describe('Validation', function () {
         });
 
         it('multiple parameters', function (done) {
-            var validationModel = {params: {
+            var validationModel = { resources: {
                     brand: { isRequired: false, multiple: true, scope: 'query', regex: /^[0-9a-fA-F]{24}$/, description: 'Return products from these brands. Can be declared multiple times.' }
                 }
             };
@@ -239,7 +239,7 @@ describe('Validation', function () {
 
         it('errorsAsArray / errorsAsObject', function (done) {
             var validationReq = { params: { } };
-            var validationModel = {params: {
+            var validationModel = { resources: {
                     status: { isRequired: true, isIn: ['foo', 'bar'], scope: 'query' }
                 }
             };
@@ -262,7 +262,7 @@ describe('Validation', function () {
         it('function as validation parameter', function (done) {
             var isRequiredTrue, validationReq = { params: { } };
             var options = { errorsAsArray: true };
-            var validationModelTrue = {params: { status: { } } };
+            var validationModelTrue = { resources: { status: { } } };
 
             isRequiredTrue = function () {
                 this.req.should.exist;
@@ -280,9 +280,9 @@ describe('Validation', function () {
                 return true;
             };
 
-            validationModelTrue.params.status.isRequired = isRequiredTrue;
-            validationModelTrue.params.status.isIn = ['foo', 'bar'];
-            validationModelTrue.params.status.scope = 'query';
+            validationModelTrue.resources.status.isRequired = isRequiredTrue;
+            validationModelTrue.resources.status.isIn = ['foo', 'bar'];
+            validationModelTrue.resources.status.scope = 'query';
 
             var errors1 = index.validation.process(validationModelTrue, validationReq, options);
             errors1.should.be.an.instanceof(Array);
@@ -296,12 +296,12 @@ describe('Validation', function () {
 
         it('validation order', function (done) {
             var validationReq = { params: { } };
-            var validationModel = { params: {
+            var validationModel = { resources: {
                     status: { isIn: ['foo', 'bar'], scope: 'query' }
                 }
             };
 
-            validationModel.params.status.isRequired = false;
+            validationModel.resources.status.isRequired = false;
             var errors0 = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
             errors0.should.be.an.instanceof(Array);
             errors0.length.should.equal(0);
@@ -311,7 +311,7 @@ describe('Validation', function () {
 
         it('validation equalTo', function (done) {
             var validationReq = { params: { } };
-            var validationModel = { params: {
+            var validationModel = { resources: {
                     a: { isRequired: true },
                     b: { equalTo: 'a' }
                 }

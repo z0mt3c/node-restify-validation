@@ -17,9 +17,9 @@ Example:
     server.use(restify.queryParser());
     server.use(restifyValidation.validationPlugin( { errorsAsArray: false }));
 
-    server.get({url: '/test/:name', validation: { params: {
+    server.get({url: '/test/:name', validation: { resources: {
         name: { isRequired: true, isIn: ['foo','bar'] }
-    }, query : {
+    }, queries : {
         status: { isRequired: true, isIn: ['foo','bar'] },
         email: { isRequired: false, isEmail: true },
         age: { isRequired: true, isNatural: true }
@@ -27,10 +27,10 @@ Example:
         res.send(req.params);
     });
 
-    server.put({url: '/products/:id/labels/:label', validation: { params: {
+    server.put({url: '/products/:id/labels/:label', validation: { resources: {
         id: { isRequired: true, isNatural: true },
         label: { isRequired: true }
-    }, query : {
+    }, queries : {
         status: { isRequired: true, isIn: ['foo','bar'] }
     }, body {
         label: {isRequired: true }
@@ -126,7 +126,7 @@ Which will be used for instance as follows:
 As result the parameter will only be required when param1 matches a or b. The called method will have a context (this) containing the following information:
 
 * req: the request object
-* scope: current scope validation
+* scope: (real) current scope validation
 * validationModel: the complete validation model
 * validationRules: the validationRules for the current atribute
 * options: the options which have initially been passed

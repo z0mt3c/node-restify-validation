@@ -27,7 +27,7 @@ describe('Conditions', function () {
     it('exists', function(done) {
         var validationReq = { params: { a: 'fdsa' } };
         var validationModel = {
-            params: {
+            resources: {
                 a: { exists: true},
                 b: { isRequired: index.when.exists('a') }
             }
@@ -44,7 +44,7 @@ describe('Conditions', function () {
         var errors2 = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
         errors2.length.should.equal(0);
 
-        validationReq.params = {};
+        validationReq.resources = {};
         var errors3 = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
         errors3.length.should.equal(0);
 
@@ -54,7 +54,7 @@ describe('Conditions', function () {
     it('paramMatches', function (done) {
         var validationReq = { params: { a: 'fdsa' } };
         var validationModel = {
-            params: {
+            resources: {
                 a: { isRequired: false },
                 b: { isRequired: index.when.paramMatches('a', ['asdf','fdsa']) }
             }
@@ -68,7 +68,7 @@ describe('Conditions', function () {
 
 
         validationModel = {
-            params: {
+            resources: {
                 a: { isRequired: false },
                 b: { isRequired: index.when.paramMatches('a', 'fdsa') }
             }
@@ -81,7 +81,7 @@ describe('Conditions', function () {
         errors[0].code.should.equal('MISSING');
 
         validationModel = {
-            params: {
+            resources: {
                 a: { isRequired: false },
                 b: { isRequired: index.when.paramMatches('a', 'asdf') }
             }
@@ -91,7 +91,7 @@ describe('Conditions', function () {
         errors.length.should.equal(0);
 
         validationModel = {
-            params: {
+            resources: {
                 a: { isRequired: false },
                 b: { isRequired: index.when.paramMatches('a', ['asdf']) }
             }
