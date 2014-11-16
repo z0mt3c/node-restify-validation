@@ -12,7 +12,7 @@ Validation for REST Services built with [node-restify](https://github.com/mcavag
 Goal of this little project is to have the validation rules / schema as close to the route itself as possible on one hand without messing up the logic with further LOCs on the other hand.
 
 Example:
-
+```javascript
     var server = restify.createServer();
     server.use(restify.queryParser());
     server.use(restifyValidation.validationPlugin( { errorsAsArray: false }));
@@ -41,11 +41,11 @@ Example:
     server.listen(8001, function () {
         console.log('%s listening at %s', server.name, server.url);
     });
-
+```
 ## Use
 Simply install it through npm
 
-    npm install node-restify-validation
+    npm install git://github.com/gchauvet/node-restify-validation.git
 
 
 ## Documentation powered by swagger
@@ -56,8 +56,10 @@ A simple demo project can be cloned from [node-restify-demo](https://github.com/
 
 ## Supported validations
 
+```javascript
     isRequired: true | function()
     equalTo: {'fieldName'}
+```
 
 Powered by [node-validator](https://github.com/chriso/validator.js).
 
@@ -82,6 +84,7 @@ Powered by [node-validator](https://github.com/chriso/validator.js).
     isIPv6
     isIn
     isInt
+    isNatural
     isLowercase
     isNumeric
     isUUID
@@ -102,32 +105,34 @@ Powered by [node-validator](https://github.com/chriso/validator.js).
 All validation parameters are able to deal with functions as parameters.
 
 For instance the parameterMatches-Condition:
-
+```javascript
     module.exports.paramMatches = function (param, value) {
         if (_.isArray(value)) {
             return function() {
-                return _.contains(value, this.req.params[param]);
+                return _.contains(value, this.req[this.scope][param]);
             };
         } else {
             return function() {
-                return _.isEqual(value, this.req.params[param]);
+                return _.isEqual(value, this.req[this.scope][param]);
             };
         }
     };
-
+```
 Which will be used for instance as follows:
 
+```javascript
     var validation = isRequired: require('node-restify-vaidation');
-    ...
+    //...
     parameter: { isRequired: validation.when.paramMatches('param1', ['a', 'b']) }
+```
 
 As result the parameter will only be required when param1 matches a or b. The called method will have a context (this) containing the following information:
 
 * req: the request object
+* scope: current scope validation
 * validationModel: the complete validation model
 * validationRules: the validationRules for the current atribute
 * options: the options which have initially been passed
-* params: flattend request parameters
 * recentErrors: errors which have been computed until now
 
 
@@ -139,7 +144,7 @@ In terms of validation node-restify-validation makes use of [node-validator](htt
 ## License
 The MIT License (MIT)
 
-Copyright (c) 2013 Timo Behrmann
+Copyright (c) 2014 Timo Behrmann, Guillaume Chauvet
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
