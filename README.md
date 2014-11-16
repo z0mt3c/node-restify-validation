@@ -1,14 +1,12 @@
 # node-restify-validation
 Validation for REST Services built with [node-restify](https://github.com/mcavage/node-restify) in node.js
 
-[![Build Status](https://travis-ci.org/z0mt3c/node-restify-validation.png)](https://travis-ci.org/z0mt3c/node-restify-validation)
-[![Coverage Status](https://coveralls.io/repos/z0mt3c/node-restify-validation/badge.png?branch=master)](https://coveralls.io/r/z0mt3c/node-restify-validation?branch=master)
+[![Build Status](https://travis-ci.org/gchauvet/node-restify-validation.png)](https://travis-ci.org/gchauvet/node-restify-validation)
+[![Coverage Status](https://coveralls.io/repos/gchauvet/node-restify-validation/badge.png?branch=master)](https://coveralls.io/r/gchauvet/node-restify-validation?branch=master)
 [![Dependency Status](https://gemnasium.com/z0mt3c/node-restify-validation.png)](https://gemnasium.com/z0mt3c/node-restify-validation)
 
 ## Requirements
 * node-restify-validation requires at least restify 2.6.0 since the validation model is defined in the route-object. (https://github.com/mcavage/node-restify/pull/408)
-* Currently it is required to map all parameters to the "params-scope" through the mapParams-option, since all validations will be performed agains the req.params object. (TODO: scope sensitive validation)
-
 
 ## Simple request validation with node-restify
 Goal of this little project is to have the validation rules / schema as close to the route itself as possible on one hand without messing up the logic with further LOCs on the other hand.
@@ -19,12 +17,24 @@ Example:
     server.use(restify.queryParser());
     server.use(restifyValidation.validationPlugin( { errorsAsArray: false }));
 
-    server.get({url: '/test/:name', validation: {
-        name: { isRequired: true, isIn: ['foo','bar'], scope: 'path' },
-        status: { isRequired: true, isIn: ['foo','bar'], scope: 'query' },
-        email: { isRequired: false, isEmail: true, scope: 'query' },
-        age: { isRequired: true, isInt: true, scope: 'query' }
-    }}, function (req, res, next) {
+    server.get({url: '/test/:name', validation: { params: {
+        name: { isRequired: true, isIn: ['foo','bar'] }
+    }, query : {
+        status: { isRequired: true, isIn: ['foo','bar'] },
+        email: { isRequired: false, isEmail: true },
+        age: { isRequired: true, isNatural: true }
+    }}}, function (req, res, next) {
+        res.send(req.params);
+    });
+
+    server.put({url: '/products/:id/labels/:label', validation: { params: {
+        id: { isRequired: true, isNatural: true },
+        label: { isRequired: true }
+    }, query : {
+        status: { isRequired: true, isIn: ['foo','bar'] }
+    }, body {
+        label: {isRequired: true }
+    }}}, function (req, res, next) {
         res.send(req.params);
     });
 

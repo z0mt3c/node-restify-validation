@@ -129,7 +129,7 @@ describe('Validation', function () {
 
     describe('validate', function () {
         it('min', function (done) {
-            var validationModel = { name: { isRequired: true, min: 10 } },
+            var validationModel = { params: { name: { isRequired: true, min: 10 } } },
                 validationReq = { params: { name: 9 } },
                 validationOptions = {};
 
@@ -145,14 +145,14 @@ describe('Validation', function () {
         });
 
         it('isIPv4', function (done) {
-            var validationModel = { name: { isRequired: true, isIPv4: false } },
+            var validationModel = {params: { name: { isRequired: true, isIPv4: false } } },
                 validationReq = { params: { name: 9 } },
                 validationOptions = { };
 
             var errors0 = index.validation.process(validationModel, validationReq, validationOptions);
             errors0.length.should.equal(0);
 
-            validationModel.name.isIPv4 = true;
+            validationModel.params.name.isIPv4 = true;
             var errors1 = index.validation.process(validationModel, validationReq, validationOptions);
             errors1.length.should.equal(1);
 
@@ -163,15 +163,15 @@ describe('Validation', function () {
             done();
         });
 
-        it('extendWithBody', function (done) {
-            var validationModel = { name: { isRequired: true, isIPv4: false } },
+        it('in body scope', function (done) {
+            var validationModel = { body: { name: { isRequired: true, isIPv4: false } } },
                 validationReq = { body: { name: 9 } },
-                validationOptions = { extendWithBody: true };
+                validationOptions = { };
 
             var errors0 = index.validation.process(validationModel, validationReq, validationOptions);
             errors0.length.should.equal(0);
 
-            validationOptions.extendWithBody = false;
+            validationReq = { params: { name: 9 } };
 
             var errors1 = index.validation.process(validationModel, validationReq, validationOptions);
             errors1.length.should.equal(1);
@@ -181,9 +181,11 @@ describe('Validation', function () {
 
         it('example #1', function (done) {
             var validationModel = {
-                status: { isRequired: true, isIn: ['foo', 'bar'], scope: 'query' },
-                email: { isRequired: false, isEmail: true, scope: 'query' },
-                age: { isRequired: true, isInt: true, scope: 'query' }
+                params: {
+                    status: { isRequired: true, isIn: ['foo', 'bar'], scope: 'query' },
+                    email: { isRequired: false, isEmail: true, scope: 'query' },
+                    age: { isRequired: true, isInt: true, scope: 'query' }
+                }
             };
 
             var validationReq = { params: {
@@ -211,8 +213,9 @@ describe('Validation', function () {
         });
 
         it('multiple parameters', function (done) {
-            var validationModel = {
-                brand: { isRequired: false, multiple: true, scope: 'query', regex: /^[0-9a-fA-F]{24}$/, description: 'Return products from these brands. Can be declared multiple times.' }
+            var validationModel = {params: {
+                    brand: { isRequired: false, multiple: true, scope: 'query', regex: /^[0-9a-fA-F]{24}$/, description: 'Return products from these brands. Can be declared multiple times.' }
+                }
             };
 
             var validationReq = {
@@ -236,8 +239,9 @@ describe('Validation', function () {
 
         it('errorsAsArray / errorsAsObject', function (done) {
             var validationReq = { params: { } };
-            var validationModel = {
-                status: { isRequired: true, isIn: ['foo', 'bar'], scope: 'query' }
+            var validationModel = {params: {
+                    status: { isRequired: true, isIn: ['foo', 'bar'], scope: 'query' }
+                }
             };
 
             var errors0 = index.validation.process(validationModel, validationReq, { errorsAsArray: false });
@@ -258,7 +262,7 @@ describe('Validation', function () {
         it('function as validation parameter', function (done) {
             var isRequiredTrue, validationReq = { params: { } };
             var options = { errorsAsArray: true };
-            var validationModelTrue = { status: { } };
+            var validationModelTrue = {params: { status: { } } };
 
             isRequiredTrue = function () {
                 this.req.should.exist;
@@ -276,9 +280,9 @@ describe('Validation', function () {
                 return true;
             };
 
-            validationModelTrue.status.isRequired = isRequiredTrue;
-            validationModelTrue.status.isIn = ['foo', 'bar'];
-            validationModelTrue.status.scope = 'query';
+            validationModelTrue.params.status.isRequired = isRequiredTrue;
+            validationModelTrue.params.status.isIn = ['foo', 'bar'];
+            validationModelTrue.params.status.scope = 'query';
 
             var errors1 = index.validation.process(validationModelTrue, validationReq, options);
             errors1.should.be.an.instanceof(Array);
@@ -292,11 +296,12 @@ describe('Validation', function () {
 
         it('validation order', function (done) {
             var validationReq = { params: { } };
-            var validationModel = {
-                status: { isIn: ['foo', 'bar'], scope: 'query' }
+            var validationModel = { params: {
+                    status: { isIn: ['foo', 'bar'], scope: 'query' }
+                }
             };
 
-            validationModel.status.isRequired = false;
+            validationModel.params.status.isRequired = false;
             var errors0 = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
             errors0.should.be.an.instanceof(Array);
             errors0.length.should.equal(0);
@@ -306,9 +311,10 @@ describe('Validation', function () {
 
         it('validation equalTo', function (done) {
             var validationReq = { params: { } };
-            var validationModel = {
-                a: { isRequired: true },
-                b: { equalTo: 'a' }
+            var validationModel = { params: {
+                    a: { isRequired: true },
+                    b: { equalTo: 'a' }
+                }
             };
 
             var errors0 = index.validation.process(validationModel, validationReq, { errorsAsArray: true });

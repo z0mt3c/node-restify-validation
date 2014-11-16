@@ -30,10 +30,10 @@ var index = require('../lib/index');
 
 var test = function (validatorName, validatorValue, correctValue, incorrectValue) {
     var validationReq = { params: { } };
-    var validationModel = { myParameter: { isRequired: true, scope: 'query' } };
+    var validationModel = { params: { myParameter: { isRequired: true, scope: 'query' } } };
     var options = { errorsAsArray: true };
 
-    validationModel.myParameter[validatorName] = validatorValue;
+    validationModel.params.myParameter[validatorName] = validatorValue;
     var errors0 = index.validation.process(validationModel, validationReq, options);
     errors0.length.should.equal(1);
     errors0[0].should.exist;

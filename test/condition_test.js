@@ -27,12 +27,15 @@ describe('Conditions', function () {
     it('exists', function(done) {
         var validationReq = { params: { a: 'fdsa' } };
         var validationModel = {
-            a: { exists: true},
-            b: { isRequired: index.when.exists('a') }
+            params: {
+                a: { exists: true},
+                b: { isRequired: index.when.exists('a') }
+            }
         };
 
         var errors = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
         errors.length.should.equal(1);
+        errors[0].scope.should.equal('params');
         errors[0].field.should.equal('b');
         errors[0].code.should.equal('MISSING');
 
@@ -51,37 +54,47 @@ describe('Conditions', function () {
     it('paramMatches', function (done) {
         var validationReq = { params: { a: 'fdsa' } };
         var validationModel = {
-            a: { isRequired: false },
-            b: { isRequired: index.when.paramMatches('a', ['asdf','fdsa']) }
+            params: {
+                a: { isRequired: false },
+                b: { isRequired: index.when.paramMatches('a', ['asdf','fdsa']) }
+            }
         };
 
         var errors = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
         errors.length.should.equal(1);
+        errors[0].scope.should.equal('params');
         errors[0].field.should.equal('b');
         errors[0].code.should.equal('MISSING');
 
 
         validationModel = {
-            a: { isRequired: false },
-            b: { isRequired: index.when.paramMatches('a', 'fdsa') }
+            params: {
+                a: { isRequired: false },
+                b: { isRequired: index.when.paramMatches('a', 'fdsa') }
+            }
         };
 
         errors = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
         errors.length.should.equal(1);
+        errors[0].scope.should.equal('params');
         errors[0].field.should.equal('b');
         errors[0].code.should.equal('MISSING');
 
         validationModel = {
-            a: { isRequired: false },
-            b: { isRequired: index.when.paramMatches('a', 'asdf') }
+            params: {
+                a: { isRequired: false },
+                b: { isRequired: index.when.paramMatches('a', 'asdf') }
+            }
         };
 
         errors = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
         errors.length.should.equal(0);
 
         validationModel = {
-            a: { isRequired: false },
-            b: { isRequired: index.when.paramMatches('a', ['asdf']) }
+            params: {
+                a: { isRequired: false },
+                b: { isRequired: index.when.paramMatches('a', ['asdf']) }
+            }
         };
 
         errors = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
