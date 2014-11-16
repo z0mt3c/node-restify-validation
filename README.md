@@ -51,9 +51,6 @@ Simply install it through npm
 ## Documentation powered by swagger
 On top of the validation schema the [node-restify-swagger](https://github.com/z0mt3c/node-restify-swagger) library should later-on generate the swagger resources to provide a hands-on documentation.
 
-## Demo project
-A simple demo project can be cloned from [node-restify-demo](https://github.com/z0mt3c/node-restify-demo).
-
 ## Supported validations
 
 ```javascript
