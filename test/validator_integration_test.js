@@ -98,6 +98,7 @@ describe('Validators', function () {
     });
     it('node-validator isNatural', function () {
         test('isNatural', true, '123', 'a1');
+        test('isNatural', true, '123', '-123');
     });
     it('node-validator isLowercase', function () {
         test('isLowercase', true, 'abc', 'aBc');
@@ -120,13 +121,6 @@ describe('Validators', function () {
     it('node-validator notContains', function () {
         test('notContains', 'bar', 'foo', 'barbar');
     });
-
-        // not supported:
-        //test('notNull', true, '0.5', ' ');
-        //test('isNull', true, '0.5', ' ');
-        //test('notEmpty', true, '0.5', '     ');
-        //test('len', [3,5], 'aaaa', ['aa','dddddd']);
-
     it('node-validator is', function () {
         test('is', /^abc$/, 'abc', 'aac');
     });
@@ -139,7 +133,6 @@ describe('Validators', function () {
     it('node-validator not', function () {
         test('not', /^abc$/, 'acc', 'abc');
     });
-
     it('node-validator isIn', function () {
         test('isIn', ['a','bc'], ['a','bc'], 'c');
     });
