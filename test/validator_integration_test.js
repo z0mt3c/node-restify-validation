@@ -29,11 +29,11 @@ var index = require('../lib/index');
 
 
 var test = function (validatorName, validatorValue, correctValue, incorrectValue) {
-    var validationReq = { params: { } };
-    var validationModel = { resources: { myParameter: { isRequired: true, scope: 'query' } } };
+    var validationReq = { params: { }, query: {} };
+    var validationModel = { queries: { myParameter: { isRequired: true } } };
     var options = { errorsAsArray: true };
 
-    validationModel.resources.myParameter[validatorName] = validatorValue;
+    validationModel.queries.myParameter[validatorName] = validatorValue;
     var errors0 = index.validation.process(validationModel, validationReq, options);
     errors0.length.should.equal(1);
     errors0[0].should.exist;
@@ -44,7 +44,7 @@ var test = function (validatorName, validatorValue, correctValue, incorrectValue
         correctValue = [correctValue];
     }
     _.each(correctValue, function(value) {
-        validationReq.params.myParameter = value;
+        validationReq.query.myParameter = value;
         var errors1 = index.validation.process(validationModel, validationReq, options);
         errors1.length.should.equal(0);
     });
@@ -54,7 +54,7 @@ var test = function (validatorName, validatorValue, correctValue, incorrectValue
     }
 
     _.each(incorrectValue, function(value) {
-        validationReq.params.myParameter = value;
+        validationReq.query.myParameter = value;
         var errors2 = index.validation.process(validationModel, validationReq, options);
         errors2.length.should.equal(1);
         errors2[0].field.should.equal('myParameter');

@@ -103,16 +103,20 @@ All validation parameters are able to deal with functions as parameters.
 
 For instance the parameterMatches-Condition:
 ```javascript
-    module.exports.paramMatches = function (param, value) {
-        if (_.isArray(value)) {
-            return function() {
-                return _.contains(value, this.req[this.scope][param]);
-            };
-        } else {
-            return function() {
-                return _.isEqual(value, this.req[this.scope][param]);
-            };
-        }
+    module.exports.paramMatches = function (params) {
+        return function() {
+            var scope = !params.scope ? this.scope : params.scope;
+            var variable = params.variable;
+            var matches = params.matches;
+
+            var result;
+            if (_.isArray(matches)) {
+                result = _.contains(matches, this.req[scope][variable]);
+            } else {
+                result = _.isEqual(matches, this.req[scope][variable]);
+            }
+            return result;
+        };
     };
 ```
 Which will be used for instance as follows:
@@ -120,7 +124,7 @@ Which will be used for instance as follows:
 ```javascript
     var validation = isRequired: require('node-restify-vaidation');
     //...
-    parameter: { isRequired: validation.when.paramMatches('param1', ['a', 'b']) }
+    parameter: { isRequired: validation.when.paramMatches({(scope: '...',) variable: 'param1', matches: ['a', 'b']}) }
 ```
 
 As result the parameter will only be required when param1 matches a or b. The called method will have a context (this) containing the following information:

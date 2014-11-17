@@ -29,7 +29,7 @@ describe('Conditions', function () {
         var validationModel = {
             resources: {
                 a: { exists: true},
-                b: { isRequired: index.when.exists('a') }
+                b: { isRequired: index.when.exists({variable: 'a'}) }
             }
         };
 
@@ -56,7 +56,7 @@ describe('Conditions', function () {
         var validationModel = {
             resources: {
                 a: { isRequired: false },
-                b: { isRequired: index.when.paramMatches('a', ['asdf','fdsa']) }
+                b: { isRequired: index.when.paramMatches({ variable: 'a', matches: ['asdf','fdsa']}) }
             }
         };
 
@@ -70,7 +70,7 @@ describe('Conditions', function () {
         validationModel = {
             resources: {
                 a: { isRequired: false },
-                b: { isRequired: index.when.paramMatches('a', 'fdsa') }
+                b: { isRequired: index.when.paramMatches({ variable: 'a', matches: ['fdsa']}) }
             }
         };
 
@@ -83,23 +83,26 @@ describe('Conditions', function () {
         validationModel = {
             resources: {
                 a: { isRequired: false },
-                b: { isRequired: index.when.paramMatches('a', 'asdf') }
+                b: { isRequired: index.when.paramMatches({ variable: 'a', matches: ['asdf']}) }
             }
         };
 
         errors = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
         errors.length.should.equal(0);
 
+        validationReq.query = {a: 'test'};
         validationModel = {
             resources: {
-                a: { isRequired: false },
-                b: { isRequired: index.when.paramMatches('a', ['asdf']) }
+                a: { isRequired: true }
+            },
+            queries: {
+                a: { isRequired: index.when.paramMatches({scope: 'resources', variable: 'a', matches: ['fdsa']}) }
             }
         };
 
         errors = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
         errors.length.should.equal(0);
-
+        
         done();
     });
 });
