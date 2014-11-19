@@ -67,6 +67,7 @@ Powered by [node-validator](https://github.com/chriso/validator.js).
     isAlpha
     isAlphanumeric
     isBefore
+    isBoolean
     isCreditCard
     isDate
     isDecimal
