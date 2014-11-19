@@ -105,7 +105,7 @@ For instance the parameterMatches-Condition:
 ```javascript
     module.exports.paramMatches = function (params) {
         return function() {
-            var scope = !params.scope ? this.scope : params.scope;
+            var scope = !params.scope ? this.scope : utils.getExternalScope(params.scope);
             var variable = params.variable;
             var matches = params.matches;
 
