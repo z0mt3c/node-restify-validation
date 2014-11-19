@@ -93,6 +93,10 @@ describe('Validators', function () {
     it('node-validator isHexColor', function () {
         test('isHexColor', true, ['#000000', 'ffffff'], '#aaaaaaaasdf');
     });
+    it('node-validator isBoolean', function () {
+        test('isBoolean', true, 'false', '0');
+        test('isBoolean', true, 'true', '1');
+    });
     it('node-validator isInt', function () {
         test('isInt', true, '123', 'a1');
     });
