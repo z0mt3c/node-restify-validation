@@ -127,7 +127,7 @@ For instance the parameterMatches-Condition:
 Which will be used for instance as follows:
 
 ```javascript
-    var validation = isRequired: require('node-restify-vaidation');
+    var validation = isRequired: require('node-restify-validation');
     //...
     parameter: { isRequired: validation.when.paramMatches({(scope: '...',) variable: 'param1', matches: ['a', 'b']}) }
 ```
