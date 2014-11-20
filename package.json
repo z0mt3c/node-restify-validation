@@ -43,6 +43,7 @@
     "mocha": "^2.0.1",
     "sinon": "^1.11.1",
     "should": "^4.3.0",
-    "mocha-cov-reporter": "^1.1.1"
+    "mocha-cov-reporter": "^1.1.1",
+    "supertest": "^0.15.0"
   }
 }

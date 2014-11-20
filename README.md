@@ -27,14 +27,18 @@ Example:
         res.send(req.params);
     });
 
-    server.put({url: '/products/:id/labels/:label', validation: { resources: {
+    server.put({url: '/products/:id/labels/:label', validation: {
+      resources: {
         id: { isRequired: true, isNatural: true },
         label: { isRequired: true }
-    }, queries : {
+      },
+      queries : {
         status: { isRequired: true, isIn: ['foo','bar'] }
-    }, body {
-        label: {isRequired: true }
-    }}}, function (req, res, next) {
+      },
+      content {
+        label: { isRequired: true }
+      }
+    }}, function (req, res, next) {
         res.send(req.params);
     });
 

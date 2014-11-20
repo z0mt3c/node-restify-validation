@@ -67,7 +67,7 @@ describe('Utils', function () {
             done();
         });
         it('for body', function (done) {
-            utils.getExternalScope('body').should.equal('body');
+            utils.getExternalScope('content').should.equal('body');
             done();
         });
     });
@@ -87,7 +87,7 @@ describe('Utils', function () {
             done();
         });
         it('for body', function (done) {
-            utils.getInternalScope('body').should.equal('body');
+            utils.getInternalScope('body').should.equal('content');
             done();
         });
     });

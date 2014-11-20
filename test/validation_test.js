@@ -164,7 +164,7 @@ describe('Validation', function () {
         });
 
         it('in body scope', function (done) {
-            var validationModel = { body: { name: { isRequired: true, isIPv4: false } } },
+            var validationModel = { content: { name: { isRequired: true, isIPv4: false } } },
                 validationReq = { body: { name: 9 } },
                 validationOptions = { };
 
