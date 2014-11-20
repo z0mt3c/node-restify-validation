@@ -17,13 +17,16 @@ Example:
     server.use(restify.queryParser());
     server.use(restifyValidation.validationPlugin( { errorsAsArray: false }));
 
-    server.get({url: '/test/:name', validation: { resources: {
+    server.get({url: '/test/:name', validation: {
+      resources: {
         name: { isRequired: true, isIn: ['foo','bar'] }
-    }, queries : {
+      },
+      queries : {
         status: { isRequired: true, isIn: ['foo','bar'] },
         email: { isRequired: false, isEmail: true },
         age: { isRequired: true, isNatural: true }
-    }}}, function (req, res, next) {
+      }
+    }}, function (req, res, next) {
         res.send(req.params);
     });
 
@@ -35,7 +38,7 @@ Example:
       queries : {
         status: { isRequired: true, isIn: ['foo','bar'] }
       },
-      content {
+      content: {
         label: { isRequired: true }
       }
     }}, function (req, res, next) {
