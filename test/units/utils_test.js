@@ -24,7 +24,7 @@
 var assert = require('assert');
 var should = require('should');
 var sinon = require('sinon');
-var utils = require('../lib/utils');
+var utils = require('../../lib/utils');
 
 describe('Utils', function () {
     describe('hasValue', function () {

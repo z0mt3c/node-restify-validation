@@ -24,7 +24,7 @@
 var assert = require('assert');
 var should = require('should');
 var sinon = require('sinon');
-var index = require('../lib/index');
+var index = require('../../lib/index');
 
 var req_validation_empty = { route: { validation: {} } };
 var req_empty = { route: {} };
