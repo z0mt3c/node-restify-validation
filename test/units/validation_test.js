@@ -181,14 +181,14 @@ describe('Validation', function () {
 
         it('example #1', function (done) {
             var validationModel = {
-                resources: {
-                    status: { isRequired: true, isIn: ['foo', 'bar'], scope: 'query' },
-                    email: { isRequired: false, isEmail: true, scope: 'query' },
-                    age: { isRequired: true, isInt: true, scope: 'query' }
+                queries: {
+                    status: { isRequired: true, isIn: ['foo', 'bar'] },
+                    email: { isRequired: false, isEmail: true },
+                    age: { isRequired: true, isInt: true }
                 }
             };
 
-            var validationReq = { params: {
+            var validationReq = { query: {
                 'name': 'Timo',
                 'status': 'bar',
                 'email': 'my.email@gmail.com',
@@ -201,11 +201,11 @@ describe('Validation', function () {
             var errors0 = index.validation.process(validationModel, validationReq, validationOptions);
             errors0.length.should.equal(0);
 
-            delete validationReq.params.email;
+            delete validationReq.query.email;
             var errors1 = index.validation.process(validationModel, validationReq, validationOptions);
             errors1.length.should.equal(0);
 
-            delete validationReq.params.status;
+            delete validationReq.query.status;
             var errors2 = index.validation.process(validationModel, validationReq, validationOptions);
             errors2.length.should.equal(1);
 
@@ -240,7 +240,7 @@ describe('Validation', function () {
         it('errorsAsArray / errorsAsObject', function (done) {
             var validationReq = { params: { } };
             var validationModel = { resources: {
-                    status: { isRequired: true, isIn: ['foo', 'bar'], scope: 'query' }
+                    status: { isRequired: true, isIn: ['foo', 'bar']}
                 }
             };
 
@@ -258,7 +258,7 @@ describe('Validation', function () {
 
             done();
         });
-
+        
         it('function as validation parameter', function (done) {
             var isRequiredTrue, validationReq = { params: { } };
             var options = { errorsAsArray: true };

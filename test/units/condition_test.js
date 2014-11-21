@@ -35,7 +35,7 @@ describe('Conditions', function () {
 
         var errors = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
         errors.length.should.equal(1);
-        errors[0].scope.should.equal('params');
+        errors[0].scope.should.equal('resources');
         errors[0].field.should.equal('b');
         errors[0].code.should.equal('MISSING');
 
@@ -62,7 +62,7 @@ describe('Conditions', function () {
 
         var errors = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
         errors.length.should.equal(1);
-        errors[0].scope.should.equal('params');
+        errors[0].scope.should.equal('resources');
         errors[0].field.should.equal('b');
         errors[0].code.should.equal('MISSING');
 
@@ -76,7 +76,7 @@ describe('Conditions', function () {
 
         errors = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
         errors.length.should.equal(1);
-        errors[0].scope.should.equal('params');
+        errors[0].scope.should.equal('resources');
         errors[0].field.should.equal('b');
         errors[0].code.should.equal('MISSING');
 
