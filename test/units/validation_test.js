@@ -259,6 +259,25 @@ describe('Validation', function () {
             done();
         });
         
+        it('forbidUndefinedVariables', function (done) {
+            var validationReq = { params: { foo: "foo", bar: "bar" } };
+            var validationModel = { resources: {
+                    foo: { isRequired: true, isIn: ['foo', 'bar'] }
+                }
+            };
+
+            var errors0 = index.validation.process(validationModel, validationReq, { errorsAsArray: false, forbidUndefinedVariables: false });
+            errors0.should.not.exists;
+
+            var errors1 = index.validation.process(validationModel, validationReq, { errorsAsArray: true, forbidUndefinedVariables: true });
+            errors1.should.be.an.instanceof(Array);
+            errors1.length.should.equal(1);
+            errors1[0].field.should.equal('bar');
+            errors1[0].code.should.equal('UNDEFINED');
+
+            done();
+        });
+
         it('function as validation parameter', function (done) {
             var isRequiredTrue, validationReq = { params: { } };
             var options = { errorsAsArray: true };

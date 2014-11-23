@@ -15,7 +15,10 @@ Example:
 ```javascript
     var server = restify.createServer();
     server.use(restify.queryParser());
-    server.use(restifyValidation.validationPlugin( { errorsAsArray: false }));
+    server.use(restifyValidation.validationPlugin( {
+        errorsAsArray: false,   // Shows errors as an array
+        forbidUndefinedVariables: false // Exclude all incoming variables not specified in validator rules
+    }));
 
     server.get({url: '/test/:name', validation: {
       resources: {
