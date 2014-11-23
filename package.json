@@ -28,7 +28,6 @@
   "readmeFilename": "README.md",
   "dependencies": {
     "lodash": "^2.4.1",
-    "underscore.string": "~2.3.3",
     "validator": "~3.22.0"
   },
   "config": {
