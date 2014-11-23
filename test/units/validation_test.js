@@ -214,7 +214,7 @@ describe('Validation', function () {
 
         it('multiple parameters', function (done) {
             var validationModel = { resources: {
-                    brand: { isRequired: false, multiple: true, scope: 'query', regex: /^[0-9a-fA-F]{24}$/, description: 'Return products from these brands. Can be declared multiple times.' }
+                    brand: { isRequired: false, multiple: true, regex: /^[0-9a-fA-F]{24}$/, description: 'Return products from these brands. Can be declared multiple times.' }
                 }
             };
 
@@ -301,7 +301,6 @@ describe('Validation', function () {
 
             validationModelTrue.resources.status.isRequired = isRequiredTrue;
             validationModelTrue.resources.status.isIn = ['foo', 'bar'];
-            validationModelTrue.resources.status.scope = 'query';
 
             var errors1 = index.validation.process(validationModelTrue, validationReq, options);
             errors1.should.be.an.instanceof(Array);
@@ -316,7 +315,7 @@ describe('Validation', function () {
         it('validation order', function (done) {
             var validationReq = { params: { } };
             var validationModel = { resources: {
-                    status: { isIn: ['foo', 'bar'], scope: 'query' }
+                    status: { isIn: ['foo', 'bar'] }
                 }
             };
 
