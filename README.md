@@ -114,21 +114,17 @@ All validation parameters are able to deal with functions as parameters.
 
 For instance the parameterMatches-Condition:
 ```javascript
-    module.exports.paramMatches = function (params) {
-        return function() {
-            var scope = !params.scope ? this.scope : utils.getExternalScope(params.scope);
-            var variable = params.variable;
-            var matches = params.matches;
-
-            var result;
-            if (_.isArray(matches)) {
-                result = _.contains(matches, this.req[scope][variable]);
-            } else {
-                result = _.isEqual(matches, this.req[scope][variable]);
-            }
-            return result;
-        };
-    };
+module.exports.paramMatches = function (params) {
+    return conditionalChecker(params, function (matches, value) {
+        var result;
+        if (_.isArray(matches)) {
+            result = _.contains(matches, value);
+        } else {
+            result = _.isEqual(matches, value);
+        }
+        return result;
+    });
+};
 ```
 Which will be used for instance as follows:
 
