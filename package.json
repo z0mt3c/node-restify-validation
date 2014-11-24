@@ -4,6 +4,9 @@
   "author": {
     "name": "Timo Behrmann"
   },
+  "contributors": {
+    "name": "Marcos Sanz"
+  },
   "license": "MIT",
   "keywords": [
     "rest",
