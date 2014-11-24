@@ -17,7 +17,10 @@ Example:
 
     var server = restify.createServer();
     server.use(restify.queryParser());
-    server.use(restifyValidation.validationPlugin( { errorsAsArray: false }));
+    server.use(restifyValidation.validationPlugin( {
+        errorsAsArray: false,
+        errorHandler: restify.errors.InvalidArgumentError
+    }));
 
     server.get({url: '/test/:name', validation: {
         name: { isRequired: true, isIn: ['foo','bar'], scope: 'path' },
@@ -32,6 +35,7 @@ Example:
         console.log('%s listening at %s', server.name, server.url);
     });
 
+
 ## Use
 Simply install it through npm
 
@@ -41,8 +45,10 @@ Simply install it through npm
 ## Documentation powered by swagger
 On top of the validation schema the [node-restify-swagger](https://github.com/z0mt3c/node-restify-swagger) library should later-on generate the swagger resources to provide a hands-on documentation.
 
+
 ## Demo project
 A simple demo project can be cloned from [node-restify-demo](https://github.com/z0mt3c/node-restify-demo).
+
 
 ## Supported validations
 
