@@ -1,8 +1,11 @@
 {
   "name": "node-restify-validation",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": {
     "name": "Timo Behrmann"
+  },
+  "contributors": {
+    "name": "Marcos Sanz"
   },
   "license": "MIT",
   "keywords": [
