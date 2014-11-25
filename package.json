@@ -30,19 +30,10 @@
     "lodash": "^2.4.1",
     "validator": "~3.22.0"
   },
-  "config": {
-    "mocha-cov-reporter": {
-      "failOnError": true,
-      "threshold": 100,
-      "useColors": true
-    }
-  },
   "devDependencies": {
     "restify": ">=2.8.1",
     "mocha": "^2.0.1",
     "sinon": "^1.11.1",
-    "should": "^4.3.0",
-    "mocha-cov-reporter": "^1.1.1",
-    "supertest": "^0.15.0"
+    "should": "^4.3.0"
+   }
   }
-}
