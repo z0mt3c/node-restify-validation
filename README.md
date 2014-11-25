@@ -1,8 +1,8 @@
 # node-restify-validation
 Validation for REST Services built with [node-restify](https://github.com/mcavage/node-restify) in node.js
 
-[![Build Status](https://travis-ci.org/gchauvet/node-restify-validation.png)](https://travis-ci.org/gchauvet/node-restify-validation)
-[![Coverage Status](https://coveralls.io/repos/gchauvet/node-restify-validation/badge.png?branch=master)](https://coveralls.io/r/gchauvet/node-restify-validation?branch=master)
+[![Build Status](https://travis-ci.org/z0mt3c/node-restify-validation.png)](https://travis-ci.org/gchauvet/node-restify-validation)
+[![Coverage Status](https://coveralls.io/repos/z0mt3c/node-restify-validation/badge.png?branch=master)](https://coveralls.io/r/gchauvet/node-restify-validation?branch=master)
 [![Dependency Status](https://gemnasium.com/z0mt3c/node-restify-validation.png)](https://gemnasium.com/z0mt3c/node-restify-validation)
 
 ## Requirements
@@ -57,7 +57,7 @@ Example:
 ## Use
 Simply install it through npm
 
-    npm install git://github.com/gchauvet/node-restify-validation.git
+    npm install node-restify-validation
 
 
 ## Documentation powered by swagger
@@ -173,9 +173,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-
-
-
-
-
-
