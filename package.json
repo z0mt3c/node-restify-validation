@@ -5,6 +5,7 @@
     "name": "Timo Behrmann"
   },
   "contributors": [
+    "Marcos Sanz",
     "Guillaume Chauvet"
   ],
   "license": "MIT",
@@ -36,4 +37,4 @@
     "sinon": "^1.11.1",
     "should": "^4.3.0"
    }
-  }
+}

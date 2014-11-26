@@ -34,7 +34,7 @@ describe('Errors', function () {
         var res = { send: send };
         var errors = {};
 
-        index.error.handle(errors, null, res, null, next);
+        index.error.handle(errors, null, res, {}, next);
 
         next.called.should.not.be.ok;
         send.calledWith(400, {
@@ -52,7 +52,7 @@ describe('Errors', function () {
         var res = { send: send };
         var errors = [];
 
-        index.error.handle(errors, null, res, null, next);
+        index.error.handle(errors, null, res, {}, next);
 
         next.called.should.not.be.ok;
         send.calledWith(400, {
