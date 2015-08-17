@@ -24,7 +24,7 @@
 'use strict';
 
 var restify = require('restify');
-var bodyParser = require('../../lib').validationPlugin;
+var validationParser = require('../../lib').validationPlugin;
 var request = require('supertest');
 
 describe("[INTEGRATION][RESTIFY]", function () {
@@ -37,13 +37,13 @@ describe("[INTEGRATION][RESTIFY]", function () {
 	
 	before(function (done) {
 	    server = restify.createServer();
-	    server.use(bodyParser({
-	      forbidUndefinedVariables: true,
-	      mapParams: true
+	    server.use(restify.bodyParser());
+	    server.use(validationParser({
+	      forbidUndefinedVariables: true
 	    }));
 	    server.listen(0, function() {
 		server.post({
-		  url: '/foo',
+		  url: '/foo/:id',
 		  validation: {
 		    resources: {
 			id: { isRequired: true, 'swaggerScope': 'path' }
@@ -56,7 +56,7 @@ describe("[INTEGRATION][RESTIFY]", function () {
 		    }
 		  }
 		}, function (req, res, next) {
-		    res.send(req.params);
+		    res.send(req.body);
 		    next();
 		});
 		done();
@@ -73,7 +73,7 @@ describe("[INTEGRATION][RESTIFY]", function () {
 	    it("not allowed route", function (done) {
 		request(server)
 		.get('/foo')
-		.expect(405)
+		.expect(404)
 		.end(done);
 	    });
 
@@ -83,7 +83,7 @@ describe("[INTEGRATION][RESTIFY]", function () {
 	
 	    it("with 1 optional field", function (done) {
 		request(server)
-		.post('/foo')
+		.post('/foo/73')
 		.send({"name": "test"})
 		.expect(200, {"name": "test"})
 		.end(done);
@@ -99,8 +99,8 @@ describe("[INTEGRATION][RESTIFY]", function () {
 	
 	before(function (done) {
 	    server = restify.createServer();
-	    server.use(bodyParser({
-	      forbidUndefinedVariables: true,
+	    server.use(restify.bodyParser());
+	    server.use(validationParser({
 	      mapParams: true
 	    }));
 	    server.use(restify.queryParser({mapParams: false}));
