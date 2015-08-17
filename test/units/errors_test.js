@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2014 Timo Behrmann, Guillaume Chauvet.
@@ -26,7 +26,37 @@ var should = require('should');
 var sinon = require('sinon');
 var index = require('../../lib/index');
 
+function errorHandler(message) {
+  return {
+    code: 'InvalidArgument',
+    message: message
+  }
+}
+
 describe('Errors', function () {
+    it('handle errors with a custom errorHandler', function (done) {
+        var send = sinon.spy();
+        var next = sinon.spy();
+        var res = { send: send };
+        var errors = { dummy: {
+            scope: 'queries',
+            field: 'dummy',
+            code: 'MISSING',
+            message: 'Field is required'
+          }
+        };
+
+        index.error.handle(errors, null, res, {errorHandler: errorHandler}, next);
+
+        next.called.should.not.be.ok;
+        send.calledWith({
+            code: 'InvalidArgument',
+            message: 'dummy (MISSING): Field is required'
+        }).should.be.ok;
+
+        done();
+    });
+
     it('handle errors object', function (done) {
 
         var send = sinon.spy();
