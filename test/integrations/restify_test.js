@@ -139,7 +139,7 @@ describe("[INTEGRATION][RESTIFY]", function () {
 	    it("with undefined query", function (done) {
 		request(server)
 		.get('/test/foo')
-		.expect(200)
+		.expect(400)
 		.end(done);
 	    });
 
