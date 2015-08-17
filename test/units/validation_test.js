@@ -266,14 +266,16 @@ describe('Validation', function () {
                 }
             };
 
-            var errors0 = index.validation.process(validationModel, validationReq, { errorsAsArray: false, forbidUndefinedVariables: false });
-            errors0.should.not.exists;
+            var errors = index.validation.process(validationModel, validationReq, { errorsAsArray: false, forbidUndefinedVariables: false });
+            errors.should.not.exists;
 
-            var errors1 = index.validation.process(validationModel, validationReq, { errorsAsArray: true, forbidUndefinedVariables: true });
-            errors1.should.be.an.instanceof(Array);
-            errors1.length.should.equal(1);
-            errors1[0].field.should.equal('bar');
-            errors1[0].code.should.equal('UNDEFINED');
+	    validationReq = { params: { foo: "foo", bar: "bar" } };
+	    
+            errors = index.validation.process(validationModel, validationReq, { errorsAsArray: true, forbidUndefinedVariables: true });
+            errors.should.be.an.instanceof(Array);
+            errors.length.should.equal(1);
+            errors[0].field.should.equal('bar');
+            errors[0].code.should.equal('UNDEFINED');
 
             done();
         });

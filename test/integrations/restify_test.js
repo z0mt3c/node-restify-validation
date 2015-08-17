@@ -37,7 +37,7 @@ describe("[INTEGRATION][RESTIFY]", function () {
 	
 	before(function (done) {
 	    server = restify.createServer();
-	    server.use(restify.bodyParser());
+	    server.use(restify.bodyParser({mapParams: false}));
 	    server.use(validationParser({
 	      forbidUndefinedVariables: true
 	    }));
@@ -99,7 +99,7 @@ describe("[INTEGRATION][RESTIFY]", function () {
 	
 	before(function (done) {
 	    server = restify.createServer();
-	    server.use(restify.bodyParser());
+	    server.use(restify.bodyParser({mapParams: false}));
 	    server.use(validationParser({
 	      mapParams: true
 	    }));
