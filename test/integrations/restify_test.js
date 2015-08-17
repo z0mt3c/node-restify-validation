@@ -24,7 +24,7 @@
 'use strict';
 
 var restify = require('restify');
-var bodyParser = require('../../lib');
+var bodyParser = require('../../lib').validationPlugin;
 var request = require('supertest');
 
 describe("[INTEGRATION][RESTIFY]", function () {
@@ -37,7 +37,7 @@ describe("[INTEGRATION][RESTIFY]", function () {
 	
 	before(function (done) {
 	    server = restify.createServer();
-	    server.use(restify.bodyParser({
+	    server.use(bodyParser({
 	      forbidUndefinedVariables: true,
 	      mapParams: true
 	    }));
@@ -99,6 +99,11 @@ describe("[INTEGRATION][RESTIFY]", function () {
 	
 	before(function (done) {
 	    server = restify.createServer();
+	    server.use(bodyParser({
+	      forbidUndefinedVariables: true,
+	      mapParams: true
+	    }));
+	    server.use(restify.queryParser({mapParams: false}));
 	    server.listen(0, function() {
 		server.get({
 		  url: '/test/:name',
@@ -126,8 +131,15 @@ describe("[INTEGRATION][RESTIFY]", function () {
 	
 	    it("no route", function (done) {
 		request(server)
-		.get('/')
+		.get('/test')
 		.expect(404)
+		.end(done);
+	    });
+	    
+	    it("with undefined query", function (done) {
+		request(server)
+		.get('/test/foo')
+		.expect(200)
 		.end(done);
 	    });
 
