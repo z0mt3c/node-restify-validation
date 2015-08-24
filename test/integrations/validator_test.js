@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2014 Timo Behrmann, Guillaume Chauvet.
@@ -94,8 +94,10 @@ describe('Validators', function () {
         test('isHexColor', true, ['#000000', 'ffffff'], '#aaaaaaaasdf');
     });
     it('node-validator isBoolean', function () {
-        test('isBoolean', true, 'false', '0');
-        test('isBoolean', true, 'true', '1');
+        test('isBoolean', true, false, 0);
+        test('isBoolean', true, true, 1);
+        test('isBoolean', true, false, 'false');
+        test('isBoolean', true, true, 'true');
     });
     it('node-validator isInt', function () {
         test('isInt', true, '123', 'a1');
