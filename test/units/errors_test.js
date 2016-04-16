@@ -48,7 +48,7 @@ describe('Errors', function () {
 
         index.error.handle(errors, null, res, {errorHandler: errorHandler}, next);
 
-        next.called.should.not.be.ok;
+        next.calledWith(false).should.be.ok;
         send.calledWith({
             code: 'InvalidArgument',
             message: 'dummy (MISSING): Field is required'
@@ -66,7 +66,7 @@ describe('Errors', function () {
 
         index.error.handle(errors, null, res, {}, next);
 
-        next.called.should.not.be.ok;
+        next.calledWith(false).should.be.ok;
         send.calledWith(400, {
             status: 'validation failed',
             errors: errors
@@ -84,7 +84,7 @@ describe('Errors', function () {
 
         index.error.handle(errors, null, res, {}, next);
 
-        next.called.should.not.be.ok;
+        next.calledWith(false).should.be.ok;
         send.calledWith(400, {
             status: 'validation failed',
             errors: errors
