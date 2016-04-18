@@ -356,3 +356,23 @@ describe('Validation', function () {
         });
     });
 });
+
+it('node-validator error messages', function() {
+  var validationReq = { params: {
+    ip:    '123',
+    isbn:  '123',
+    isbn2: '123'
+  } };
+  var validationModel = { resources: {
+    ip:    { isRequired: true, isIP: true },
+    isbn:  { isRequired: true, isISBN: true, msg: 'Invalid ISBN' },
+    isbn2: { isRequired: true, isISBN: true },
+  } };
+  var options = { errorsAsArray: true };
+
+  var errors = index.validation.process(validationModel, validationReq, options);
+  errors.length.should.equal(3);
+  'Invalid IP'.should.equal(errors[0].message);
+  'Invalid ISBN'.should.equal(errors[1].message);
+  'Invalid value'.should.equal(errors[2].message);
+});
