@@ -1,6 +1,6 @@
 {
   "name": "node-restify-validation",
-  "version": "1.0.5-pre",
+  "version": "1.0.5",
   "author": {
     "name": "Timo Behrmann"
   },
