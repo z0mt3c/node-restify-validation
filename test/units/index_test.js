@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-var assert = require('assert');
 var should = require('should');
 var sinon = require('sinon');
 var index = require('../../lib/index');
