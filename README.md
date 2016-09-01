@@ -36,6 +36,18 @@ Example:
         res.send(req.params);
     });
 
+    // Ensure there is a file uploaded:
+    server.post({url: '/test/:name', validation: {
+      resources: {
+        name: { isRequired: true, isIn: ['foo','bar'] }
+      },
+      files : {
+        myfile: { isRequired: true }
+      }
+    }}, function (req, res, next) {
+        res.send(req.params);
+    });
+
     server.put({url: '/products/:id/labels/:label', validation: {
       resources: {
         id: { isRequired: true, isNatural: true },
