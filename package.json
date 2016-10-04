@@ -1,12 +1,13 @@
 {
   "name": "node-restify-validation",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "author": {
     "name": "Timo Behrmann"
   },
   "contributors": [
     "Marcos Sanz",
-    "Guillaume Chauvet"
+    "Guillaume Chauvet",
+    "Stefan Schärmeli"
   ],
   "license": "MIT",
   "keywords": [
