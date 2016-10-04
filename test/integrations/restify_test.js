@@ -82,18 +82,15 @@ describe("[INTEGRATION][RESTIFY]", function() {
 
 
       describe("on GET", function() {
-
         it("not allowed route", function(done) {
           request(server)
             .get('/foo')
             .expect(404)
             .end(done);
         });
-
       });
 
       describe("on POST", function() {
-
         it("with 1 optional field", function(done) {
           request(server)
             .post('/foo/73')
@@ -105,26 +102,17 @@ describe("[INTEGRATION][RESTIFY]", function() {
             })
             .end(done);
         });
-
       });
-
     });
 
     describe('#37', function() {
 
       var server;
-
       before(function(done) {
         server = restify.createServer();
-        server.use(restify.bodyParser({
-          mapParams: false
-        }));
-        server.use(validationParser({
-          mapParams: true
-        }));
-        server.use(restify.queryParser({
-          mapParams: false
-        }));
+        server.use(restify.bodyParser({ mapParams: false }));
+        server.use(validationParser({ mapParams: true }));
+        server.use(restify.queryParser({ mapParams: false }));
         server.listen(0, function() {
           server.get({
             url: '/test/:name',
@@ -147,7 +135,6 @@ describe("[INTEGRATION][RESTIFY]", function() {
         server.close(done);
       });
 
-
       describe("on GET", function() {
 
         it("no route", function(done) {
@@ -160,7 +147,14 @@ describe("[INTEGRATION][RESTIFY]", function() {
         it("with undefined query", function(done) {
           request(server)
             .get('/test/foo')
-            .expect(400)
+            .expect(409)
+            .end(done);
+        });
+
+        it("with query present", function(done) {
+          request(server)
+            .get('/test/foo?age=1')
+            .expect(409)
             .end(done);
         });
 
