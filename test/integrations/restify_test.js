@@ -154,7 +154,7 @@ describe("[INTEGRATION][RESTIFY]", function() {
         it("with query present", function(done) {
           request(server)
             .get('/test/foo?age=1')
-            .expect(409)
+            .expect(200)
             .end(done);
         });
 
