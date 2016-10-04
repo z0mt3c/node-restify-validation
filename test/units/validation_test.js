@@ -369,7 +369,7 @@ it('node-validator error messages', function() {
 
   var errors = index.validation.process(validationModel, validationReq, options);
   errors.length.should.equal(3);
-  'Invalid IP'.should.equal(errors[0].message);
-  'Invalid ISBN'.should.equal(errors[1].message);
-  'Invalid value'.should.equal(errors[2].message);
+  'Invalid IP'.should.equal(errors[0].reason);
+  'Invalid ISBN'.should.equal(errors[1].reason);
+  'Invalid value'.should.equal(errors[2].reason);
 });
