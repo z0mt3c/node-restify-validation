@@ -57,7 +57,6 @@ describe('Errors', function () {
     });
 
     it('handle errors object', function (done) {
-
         var send = sinon.spy();
         var next = sinon.spy();
         var res = { send: send };
@@ -66,8 +65,9 @@ describe('Errors', function () {
         index.error.handle(errors, null, res, {}, next);
 
         next.calledWith(false).should.be.ok;
-        send.calledWith(400, {
-            status: 'validation failed',
+        send.calledWith(409, {
+            code: 'InvalidArgument',
+            message: 'Validation failed',
             errors: errors
         }).should.be.ok;
 
@@ -75,7 +75,6 @@ describe('Errors', function () {
     });
 
     it('handle errors array', function (done) {
-
         var send = sinon.spy();
         var next = sinon.spy();
         var res = { send: send };
@@ -84,8 +83,9 @@ describe('Errors', function () {
         index.error.handle(errors, null, res, {}, next);
 
         next.calledWith(false).should.be.ok;
-        send.calledWith(400, {
-            status: 'validation failed',
+        send.calledWith(409, {
+            code: 'InvalidArgument',
+            message: 'Validation failed',
             errors: errors
         }).should.be.ok;
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2014 Timo Behrmann, Guillaume Chauvet.
@@ -240,25 +240,24 @@ describe('Validation', function () {
         it('errorsAsArray / errorsAsObject', function (done) {
             var validationReq = { params: { } };
             var validationModel = { resources: {
-                    status: { isRequired: true, isIn: ['foo', 'bar']}
+                    testParam: { isRequired: true, isIn: ['foo', 'bar']}
                 }
             };
 
-            var errors0 = index.validation.process(validationModel, validationReq, { errorsAsArray: false });
-            errors0.should.have.type('object');
-            errors0.status.should.exist;
-            errors0.status.field.should.equal('status');
-            errors0.status.code.should.equal('MISSING');
+            var objectRes = index.validation.process(validationModel, validationReq, { errorsAsArray: false });
+            objectRes.should.have.type('object');
+            objectRes.testParam.reason.should.equal('Field is required');
+            objectRes.testParam.type.should.equal('MISSING');
 
-            var errors1 = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
-            errors1.should.be.an.instanceof(Array);
-            errors1.length.should.equal(1);
-            errors1[0].field.should.equal('status');
-            errors1[0].code.should.equal('MISSING');
+            var arrayRes = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+            arrayRes.should.be.an.instanceof(Array);
+            arrayRes.length.should.equal(1);
+            arrayRes[0].reason.should.equal('Field is required');
+            arrayRes[0].type.should.equal('MISSING');
 
             done();
         });
-        
+
         it('forbidUndefinedVariables', function (done) {
             var validationReq = { params: { foo: "foo", bar: "bar" } };
             var validationModel = { resources: {
@@ -266,16 +265,14 @@ describe('Validation', function () {
                 }
             };
 
-            var errors = index.validation.process(validationModel, validationReq, { errorsAsArray: false, forbidUndefinedVariables: false });
-            errors.should.not.exists;
+            var validRes = index.validation.process(validationModel, validationReq, { errorsAsArray: false, forbidUndefinedVariables: false });
+            validRes.should.be.empty;
 
-	    validationReq = { params: { foo: "foo", bar: "bar" } };
-	    
-            errors = index.validation.process(validationModel, validationReq, { errorsAsArray: true, forbidUndefinedVariables: true });
-            errors.should.be.an.instanceof(Array);
-            errors.length.should.equal(1);
-            errors[0].field.should.equal('bar');
-            errors[0].code.should.equal('UNDEFINED');
+            var invalidRes = index.validation.process(validationModel, validationReq, { errorsAsArray: true, forbidUndefinedVariables: true });
+            invalidRes.should.be.an.instanceof(Array);
+            invalidRes.length.should.equal(1);
+            invalidRes[0].reason.should.equal('Variable is not present');
+            invalidRes[0].type.should.equal('UNDEFINED');
 
             done();
         });
@@ -304,11 +301,11 @@ describe('Validation', function () {
             validationModelTrue.resources.status.isRequired = isRequiredTrue;
             validationModelTrue.resources.status.isIn = ['foo', 'bar'];
 
-            var errors1 = index.validation.process(validationModelTrue, validationReq, options);
-            errors1.should.be.an.instanceof(Array);
-            errors1.length.should.equal(1);
-            errors1[0].field.should.equal('status');
-            errors1[0].code.should.equal('MISSING');
+            var validationRes = index.validation.process(validationModelTrue, validationReq, options);
+            validationRes.should.be.an.instanceof(Array);
+            validationRes.length.should.equal(1);
+            validationRes[0].reason.should.equal('Field is required');
+            validationRes[0].type.should.equal('MISSING');
 
             done();
         });
@@ -337,20 +334,20 @@ describe('Validation', function () {
                 }
             };
 
-            var errors0 = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
-            errors0.length.should.equal(1);
-            errors0[0].field.should.equal('a');
-            errors0[0].code.should.equal('MISSING');
+            var checkMissing = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+            checkMissing.length.should.equal(1);
+            checkMissing[0].reason.should.equal('Field is required');
+            checkMissing[0].type.should.equal('MISSING');
 
             validationReq.params.a = 'abc';
-            errors0 = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
-            errors0.length.should.equal(1);
-            errors0[0].field.should.equal('b');
-            errors0[0].code.should.equal('INVALID');
+            var checkInvalid = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+            checkInvalid.length.should.equal(1);
+            checkInvalid[0].reason.should.equal('Needs to equal (THE OTHER FIELD)');
+            checkInvalid[0].type.should.equal('INVALID');
 
             validationReq.params.b = 'abc';
-            errors0 = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
-            errors0.length.should.equal(0);
+            var checkValid = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+            checkValid.length.should.equal(0);
 
             done();
         });
@@ -372,7 +369,7 @@ it('node-validator error messages', function() {
 
   var errors = index.validation.process(validationModel, validationReq, options);
   errors.length.should.equal(3);
-  'Invalid IP'.should.equal(errors[0].message);
-  'Invalid ISBN'.should.equal(errors[1].message);
-  'Invalid value'.should.equal(errors[2].message);
+  'Invalid IP'.should.equal(errors[0].reason);
+  'Invalid ISBN'.should.equal(errors[1].reason);
+  'Invalid value'.should.equal(errors[2].reason);
 });

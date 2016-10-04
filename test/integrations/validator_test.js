@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2014 Timo Behrmann, Guillaume Chauvet.
@@ -27,36 +27,38 @@ var index = require('../../lib/index');
 
 
 var test = function (validatorName, validatorValue, correctValue, incorrectValue) {
-    var validationReq = { params: { }, query: {} };
+    var validationReq = { query: {} };
     var validationModel = { queries: { myParameter: { isRequired: true } } };
     var options = { errorsAsArray: true };
 
     validationModel.queries.myParameter[validatorName] = validatorValue;
-    var errors0 = index.validation.process(validationModel, validationReq, options);
-    errors0.length.should.equal(1);
-    errors0[0].should.exist;
-    errors0[0].field.should.equal('myParameter');
-    errors0[0].code.should.equal('MISSING');
 
+    //check MISSING validation
+    var checkMissing = index.validation.process(validationModel, validationReq, options);
+    checkMissing.length.should.equal(1);
+    checkMissing[0].type.should.equal('MISSING');
+
+    // check VALID validation
     if (!_.isArray(correctValue)) {
         correctValue = [correctValue];
     }
+
     _.each(correctValue, function(value) {
         validationReq.query.myParameter = value;
-        var errors1 = index.validation.process(validationModel, validationReq, options);
-        errors1.length.should.equal(0);
+        var checkValid = index.validation.process(validationModel, validationReq, options);
+        checkValid.length.should.equal(0);
     });
 
+    // check INVALID validation
     if (!_.isArray(incorrectValue)) {
         incorrectValue = [incorrectValue];
     }
 
     _.each(incorrectValue, function(value) {
         validationReq.query.myParameter = value;
-        var errors2 = index.validation.process(validationModel, validationReq, options);
-        errors2.length.should.equal(1);
-        errors2[0].field.should.equal('myParameter');
-        errors2[0].code.should.equal('INVALID');
+        var checkInvalid = index.validation.process(validationModel, validationReq, options);
+        checkInvalid.length.should.equal(1);
+        checkInvalid[0].type.should.equal('INVALID');
     });
 };
 
