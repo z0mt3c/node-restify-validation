@@ -1,12 +1,13 @@
 {
   "name": "node-restify-validation",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "author": {
     "name": "Timo Behrmann"
   },
   "contributors": [
     "Marcos Sanz",
-    "Guillaume Chauvet"
+    "Guillaume Chauvet",
+    "Stefan Schärmeli"
   ],
   "license": "MIT",
   "keywords": [
@@ -29,7 +30,7 @@
   "readmeFilename": "README.md",
   "dependencies": {
     "lodash": "^2.4.1",
-    "validator": "3.7.x"
+    "validator": "3.22.x"
   },
   "devDependencies": {
     "restify": ">=2.8.1",
