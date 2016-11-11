@@ -63,6 +63,18 @@ Example:
         res.send(req.params);
     });
 
+    // Validate header fields
+    server.get({url: '/test/something/:name', validation: {
+      resources: {
+        name: { isRequired: true, isIn: ['foo','bar'] }
+      },
+      headers: {
+        requestid: { isRequired: true }
+      }
+    }}, function (req, res, next) {
+        res.send(req.params);
+    });
+
     server.listen(8001, function () {
         console.log('%s listening at %s', server.name, server.url);
     });
