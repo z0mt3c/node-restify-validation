@@ -162,5 +162,73 @@ describe("[INTEGRATION][RESTIFY]", function() {
 
     });
 
+    describe('#52 - Support header validation', function() {
+
+      var server;
+
+      before(function (done) {
+        server = restify.createServer();
+        server.use(restify.bodyParser());
+        server.use(validationParser({
+          forbidUndefinedVariables: false
+        }));
+        server.listen(0, function() {
+          server.post({
+            url: '/foo/:id',
+            validation: {
+              resources: {
+                id: { isRequired: true }
+              },
+              content: {
+                name: {isRequired: true},
+              },
+              headers: {
+                "request-id": { isRequired: true, isNumeric: true },
+              }
+            }
+          }, function (req, res, next) {
+            console.log(req);
+            res.send(req.body);
+            next();
+          });
+          done();
+        });
+      });
+
+      after(function (done) {
+        server.close(done);
+      });
+
+      describe("on POST", function() {
+
+        it("with required header field", function (done) {
+          request(server)
+            .post('/foo/73')
+            .set('Request-Id', 12345)
+            .send({"name": "test"})
+            .expect(200, {"name": "test"})
+            .end(done);
+        });
+
+        it("without required header field", function (done) {
+          request(server)
+            .post('/foo/73')
+            .send({"name": "test"})
+            .expect(409,  {
+              code: "InvalidArgument",
+              errors: [
+                {
+                  type: "MISSING",
+                  reason: "Field is required",
+                }
+              ],
+              message: "Validation failed"
+            })
+            .end(done);
+        });
+      });
+
+    });
+
   });
 });
