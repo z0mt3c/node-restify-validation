@@ -147,7 +147,18 @@ describe("[INTEGRATION][RESTIFY]", function() {
         it("with undefined query", function(done) {
           request(server)
             .get('/test/foo')
-            .expect(409)
+            .expect(409, {
+              code: "InvalidArgument",
+              errors: [
+                {
+                  scope: "queries",
+                  field: "age",
+                  type: "MISSING",
+                  reason: "Field is required",
+                }
+              ],
+              message: "Validation failed"
+            })
             .end(done);
         });
 
@@ -218,6 +229,8 @@ describe("[INTEGRATION][RESTIFY]", function() {
               code: "InvalidArgument",
               errors: [
                 {
+                  scope: "headers",
+                  field: "request-id",
                   type: "MISSING",
                   reason: "Field is required",
                 }
