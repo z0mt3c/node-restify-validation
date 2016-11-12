@@ -68,10 +68,6 @@ describe('Utils', function () {
             utils.getExternalScope('content').should.equal('body');
             done();
         });
-        it('for headers', function (done) {
-            utils.getExternalScope('headers').should.equal('headers');
-            done();
-        });
     });
     
     describe('getInternalScope', function () {
@@ -90,10 +86,6 @@ describe('Utils', function () {
         });
         it('for body', function (done) {
             utils.getInternalScope('body').should.equal('content');
-            done();
-        });
-        it('for headers', function (done) {
-            utils.getInternalScope('headers').should.equal('headers');
             done();
         });
     });
