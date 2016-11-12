@@ -187,7 +187,6 @@ describe("[INTEGRATION][RESTIFY]", function() {
               }
             }
           }, function (req, res, next) {
-            console.log(req);
             res.send(req.body);
             next();
           });
