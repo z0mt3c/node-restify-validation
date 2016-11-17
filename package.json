@@ -29,8 +29,8 @@
   "main": "lib/index",
   "readmeFilename": "README.md",
   "dependencies": {
-    "lodash": "^4.16.6",
-    "validator": "6.1.x"
+    "lodash": "^3.10.x",
+    "validator": "3.22.x"
   },
   "devDependencies": {
     "restify": ">=2.8.1",
