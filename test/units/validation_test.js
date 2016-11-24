@@ -119,8 +119,8 @@ describe('Validation', function () {
             validatorChainAsObject2[0].fn.should.equal(testFunction1);
             validatorChainAsObject2[0].msg.should.equal(testFunction1);
 
-            generationSpy.calledTwice.should.not.be.ok;
-            generationSpy.calledOnce.should.be.ok;
+            generationSpy.calledTwice.should.not.be.ok();
+            generationSpy.calledOnce.should.be.ok();
             generationSpy.restore();
 
             done();
