@@ -48,8 +48,8 @@ describe('Plugin test', function () {
             errors.should.equal(error);
             req.should.equal(req_validation_empty);
             res.should.equal(res_empty);
-            processValidation.called.should.be.ok;
-            handleErrors.called.should.be.ok;
+            processValidation.called.should.be.ok();
+            handleErrors.called.should.be.ok();
             processValidation.restore();
             handleErrors.restore();
             done();
@@ -72,7 +72,7 @@ describe('Plugin test', function () {
         index.validationPlugin()(req_validation_empty, res_empty, function () {
             handleErrorsSpy.called.should.not.be.ok;
             handleErrorsSpy.restore();
-            processValidation.called.should.be.ok;
+            processValidation.called.should.be.ok();
             processValidation.restore();
             done();
         });
