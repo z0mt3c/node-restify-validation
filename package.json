@@ -1,6 +1,6 @@
 {
   "name": "node-restify-validation",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "author": {
     "name": "Timo Behrmann"
   },
@@ -29,14 +29,14 @@
   "main": "lib/index",
   "readmeFilename": "README.md",
   "dependencies": {
-    "lodash": "^3.10.x",
+    "lodash": "3.10.x",
     "validator": "3.22.x"
   },
   "devDependencies": {
     "restify": ">=2.8.1",
-    "mocha": "^3.1.2",
-    "sinon": "^1.11.1",
-    "should": "^11.1.1",
-    "supertest": "^2.0.1"
+    "mocha": "3.1.x",
+    "sinon": "1.11.x",
+    "should": "11.1.x",
+    "supertest": "2.0.x"
   }
 }
