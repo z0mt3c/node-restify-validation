@@ -48,6 +48,7 @@ Example:
         res.send(req.params);
     });
 
+    // Checks the body of the request contains a json payload with a 'label' attribute
     server.put({url: '/products/:id/labels/:label', validation: {
       resources: {
         id: { isRequired: true, isNatural: true },
