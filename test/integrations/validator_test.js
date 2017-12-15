@@ -177,4 +177,11 @@ describe('Validators', function () {
     it('node-validator arrays', function() {
         test('isInt', true, '123', [['456', '0.123']]);
     });
+
+    it('isArray', function() {
+        test('isArray', false, [123, 'string'], [[123], ['string', 123, false]]);
+        test('isArray', true, [[123], ['string', 123, false]], [123, 'string']);
+        test('isArray', { minLength: 2 }, [[1,2], [1, 2, 3]], [123, [1]]);
+        test('isArray', { maxLength: 3 }, [[1], [1, 2, 3]], [123, [1,2,3,4]]);
+    });
 });

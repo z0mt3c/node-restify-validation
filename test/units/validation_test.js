@@ -351,6 +351,80 @@ describe('Validation', function () {
 
             done();
         });
+
+        describe('isArray', function() {
+            var validationReq = { body: {
+                    numArr: [1, 2, 34],
+                    numArrNull: [1, 2, null, 34],
+                    strVal: "I'm just a string"
+                }
+            };
+
+            it ('should accept array when true', function() {
+                var validationModel = { content: {
+                        numArrNull: { isArray: true }
+                    }
+                };
+                var checkInvalid = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+                checkInvalid.length.should.equal(0);
+            });
+
+            it ('should reject non-array when true', function() {
+                var validationModel = { content: {
+                        strVal: { isArray: true }
+                    }
+                };
+                var checkInvalid = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+                checkInvalid.length.should.equal(1);
+                checkInvalid[0].reason.should.equal('Field is not array');
+                checkInvalid[0].type.should.equal('INVALID');
+            });
+
+            it ('should reject array when false', function() {
+                var validationModel = { content: {
+                        numArr: { isArray: false }
+                    }
+                };
+                var checkInvalid = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+                checkInvalid.length.should.equal(1);
+                checkInvalid[0].reason.should.equal('Field is an array');
+                checkInvalid[0].type.should.equal('INVALID');
+            });
+
+            it ('should validate minLength', function() {
+                var validationModel = { content: {
+                        numArr: { isArray: {} }
+                    }
+                };
+
+                validationModel.content.numArr.isArray.minLength = 1;
+                var checkInvalidOk = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+                checkInvalidOk.length.should.equal(0);
+
+                validationModel.content.numArr.isArray.minLength = 5;
+                var checkInvalidFail = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+                checkInvalidFail.length.should.equal(1);
+                checkInvalidFail[0].reason.should.equal('Not enough elements');
+                checkInvalidFail[0].type.should.equal('INVALID');
+            });
+
+            it ('should validate maxLength', function() {
+                var validationModel = { content: {
+                        numArr: { isArray: {} }
+                    }
+                };
+
+                validationModel.content.numArr.isArray.maxLength = 10;
+                var checkInvalidOk = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+                checkInvalidOk.length.should.equal(0);
+
+                validationModel.content.numArr.isArray.maxLength = 2;
+                var checkInvalidFail = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+                checkInvalidFail.length.should.equal(1);
+                checkInvalidFail[0].reason.should.equal('Too many elements');
+                checkInvalidFail[0].type.should.equal('INVALID');
+            });
+        });
     });
 });
 
