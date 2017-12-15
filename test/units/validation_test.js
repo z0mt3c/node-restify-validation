@@ -425,6 +425,47 @@ describe('Validation', function () {
                 checkInvalidFail[0].type.should.equal('INVALID');
             });
         });
+
+        describe('isObject', function() {
+            var validationReq = { body: {
+                    objVal: { name: "Bob" },
+                    strVal: "I'm just a string",
+                    arrVal: [123, "bob"]
+                }
+            };
+
+            it ('accept object when true', function() {
+                var validationModel = { content: {
+                        objVal: { isObject: true }
+                    }
+                };
+                var checkInvalid = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+                checkInvalid.length.should.equal(0);
+            });
+
+            it ('reject non-object when true', function() {
+                var checkInvalidString = index.validation.process({ content: { strVal: { isObject: true } } }, validationReq, { errorsAsArray: true });
+                checkInvalidString.length.should.equal(1);
+                checkInvalidString[0].reason.should.equal('Field is not object');
+                checkInvalidString[0].type.should.equal('INVALID');
+
+                var checkInvalidArray = index.validation.process({ content: { arrVal: { isObject: true } } }, validationReq, { errorsAsArray: true });
+                checkInvalidArray.length.should.equal(1);
+                checkInvalidArray[0].reason.should.equal('Field is not object');
+                checkInvalidArray[0].type.should.equal('INVALID');
+            });
+
+            it ('reject object when false', function() {
+                var validationModel = { content: {
+                        objVal: { isObject: false }
+                    }
+                };
+                var checkInvalid = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+                checkInvalid.length.should.equal(1);
+                checkInvalid[0].reason.should.equal('Field is an object');
+                checkInvalid[0].type.should.equal('INVALID');
+            });
+        });
     });
 });
 

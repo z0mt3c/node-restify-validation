@@ -184,4 +184,9 @@ describe('Validators', function () {
         test('isArray', { minLength: 2 }, [[1,2], [1, 2, 3]], [123, [1]]);
         test('isArray', { maxLength: 3 }, [[1], [1, 2, 3]], [123, [1,2,3,4]]);
     });
+
+    it('isObject', function() {
+        test('isObject', false, [123, 'string', [123]], [{}, {name:"bob"}]);
+        test('isObject', true, [{}, {name:"bob"}], [123, 'string', [123]]);
+    });
 });
