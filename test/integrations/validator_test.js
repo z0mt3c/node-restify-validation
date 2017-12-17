@@ -183,10 +183,84 @@ describe('Validators', function () {
         test('isArray', true, [[123], ['string', 123, false]], [123, 'string']);
         test('isArray', { minLength: 2 }, [[1,2], [1, 2, 3]], [123, [1]]);
         test('isArray', { maxLength: 3 }, [[1], [1, 2, 3]], [123, [1,2,3,4]]);
+        test('isArray', { element: { isNatural: true } }, [[1], [1, 2, 3]], [["a"], [-1]]);
+        var validationModel = {
+            element: {
+                isObject: {
+                    properties: {
+                        name: { isRequired: true },
+                        age: { isNatural: true, isRequired: false }
+                    }
+                }
+            }
+        };
+        test('isArray', validationModel, [[{
+            name: "Alice"
+        }, {
+            name: "Bob",
+            age: 33
+        }]], [["a"], [{
+            name: "Alice",
+            age: -5
+        }]]);
     });
 
     it('isObject', function() {
         test('isObject', false, [123, 'string', [123]], [{}, {name:"bob"}]);
         test('isObject', true, [{}, {name:"bob"}], [123, 'string', [123]]);
+        test('isObject', { properties: { value: { isNatural: true } }}, [{value:123}, {value:123, name:'bob'}], [{value:-5}, {value:'abc'}]);
+        var validationModel = {
+            properties: {
+                address: {
+                    isObject: {
+                        properties: {
+                            street: {
+                                isRequired: true
+                            },
+                            city: {
+                                isRequired: true
+                            },
+                            zip: {
+                                isNatural: true
+                            }
+                        }
+                    }
+                },
+                luckyNumbers: {
+                    isArray: {
+                        element: {
+                            isNatural: true
+                        }
+                    }
+                }
+            }
+        };
+        test('isObject', validationModel, [{
+            address: {
+                street: 'Elm Street',
+                city: 'Springfield',
+                zip: 12345
+            }
+        }, {
+            address: {
+                street: 'Elm Street',
+                city: 'Springfield',
+                zip: 12345
+            },
+            luckyNumbers: [1, 13, 888]
+        }], ['test', 123, {
+            address: {
+                street: 'Elm Street',
+                city: 'Springfield',
+                zip: -5
+            }
+        }, {
+            address: {
+                street: 'Elm Street',
+                city: 'Springfield',
+                zip: 12345
+            },
+            luckyNumbers: [1, "not a number", 888]
+        }]);
     });
 });

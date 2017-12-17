@@ -22,6 +22,7 @@
  * THE SOFTWARE.
  */
 var index = require('../../lib/index');
+var _ = require('lodash');
 var sinon = require('sinon');
 
 var options = {};
@@ -443,6 +444,48 @@ describe('Validation', function () {
                 checkMissing.length.should.equal(0);
             });
 
+            it('validate array elements', function () {
+                var validationReq = {
+                    body: {
+                        numbers: [1, 5, 67],
+                        numbersInvalid: [1, 5, "a", 67, "b"],
+                        numbersAndNull: [1, 5, null, 67]
+                    }
+                };
+
+                var checkInvalidNumbersInvalid = index.validation.process({
+                    content: {
+                        numbersInvalid: {
+                            isArray: {
+                                element: {
+                                    isInt: true
+                                }
+                            }
+                        }
+                    }
+                }, validationReq, {errorsAsArray: true});
+                checkInvalidNumbersInvalid.length.should.equal(1);
+                checkInvalidNumbersInvalid[0].reason.should.equal('Invalid integer');
+                checkInvalidNumbersInvalid[0].type.should.equal('INVALID');
+                checkInvalidNumbersInvalid[0].field.should.equal('numbersInvalid[2]');
+
+                var checkInvalidNumbersAndNulls = index.validation.process({
+                    content: {
+                        numbersAndNull: {
+                            isArray: {
+                                element: {
+                                    isInt: true
+                                }
+                            }
+                        }
+                    }
+                }, validationReq, {errorsAsArray: true});
+                checkInvalidNumbersAndNulls.length.should.equal(1);
+                checkInvalidNumbersAndNulls[0].reason.should.equal('Invalid integer');
+                checkInvalidNumbersAndNulls[0].type.should.equal('INVALID');
+                checkInvalidNumbersAndNulls[0].field.should.equal('numbersAndNull[2]');
+            });
+
         });
 
         describe('isObject', function () {
@@ -495,6 +538,75 @@ describe('Validation', function () {
                 checkInvalid[0].reason.should.equal('Field is an object');
                 checkInvalid[0].type.should.equal('INVALID');
             });
+
+            it('validate properties', function () {
+                var validationModel = {
+                    content: {
+                        person: {
+                            isRequired: true,
+                            isObject: {
+                                properties: {
+                                    name: {
+                                        isRequired: true
+                                    },
+                                    age: {
+                                        isRequired: true,
+                                        isNatural: true
+                                    },
+                                    preferences: {
+                                        isObject: {
+                                            properties: {
+                                                favoriteNumber: {
+                                                    isRequired: true,
+                                                    isInt: true
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                };
+
+                var tests = [{
+                    prepare: function (request) {
+                        delete request.body.person;
+                    },
+                    expected: {type: 'MISSING', field: 'person'}
+                }, {
+                    prepare: function (request) {
+                        delete request.body.person.name;
+                    },
+                    expected: {type: 'MISSING', field: 'person.name'}
+                }, {
+                    prepare: function (request) {
+                        delete request.body.person.age;
+                    },
+                    expected: {type: 'MISSING', field: 'person.age'}
+                }, {
+                    prepare: function (request) {
+                        request.body.person.age = -5;
+                    },
+                    expected: {type: 'INVALID', field: 'person.age'}
+                }, {
+                    prepare: function (request) {
+                        request.body.person.preferences.favoriteNumber = "not a number";
+                    },
+                    expected: {type: 'INVALID', field: 'person.preferences.favoriteNumber'}
+                }];
+
+                _.forEach(tests, function (test) {
+                    var request = JSON.parse(JSON.stringify(validationReq));
+                    test.prepare(request);
+
+                    var checkInvalid = index.validation.process(validationModel, request, {errorsAsArray: true});
+                    checkInvalid.length.should.equal(1);
+                    checkInvalid[0].type.should.equal(test.expected.type);
+                    checkInvalid[0].field.should.equal(test.expected.field);
+                });
+            });
+
         });
     });
 });
