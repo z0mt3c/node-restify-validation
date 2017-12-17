@@ -48,7 +48,11 @@ Example:
         res.send(req.params);
     });
 
-    // Checks the body of the request contains a json payload with a 'label' attribute
+    // Checks the body of the request contains a json payload with a `person` object with the following attributes:
+    //   firstName - required
+    //   middle - optional
+    //   lastName - required
+    //   emails - optional array of email addresses with at most 5 elements
     server.put({url: '/products/:id/labels/:label', validation: {
       resources: {
         id: { isRequired: true, isNatural: true },
@@ -58,6 +62,21 @@ Example:
         status: { isRequired: true, isIn: ['foo','bar'] }
       },
       content: {
+        person: {
+            isObject: {
+                properties: {
+                    firstName: { isRequired: true },
+                    middle: { isRequired: false },
+                    lastName: { isRequired: true },
+                    emails: {
+                        isArray: {
+                            maxLength: 5,
+                            element: { isEmail: true }
+                        }
+                    }
+                }
+            }
+        },
         label: { isRequired: true }
       }
     }}, function (req, res, next) {
@@ -151,6 +170,79 @@ Powered by [node-validator](https://github.com/chriso/validator.js).
     notRegex
     regex
 
+## Nested validation
+
+Validation nesting allows validating content that contains objects and arrays.
+
+### isArray
+
+Validates that specified value is an array.  It can take a boolean value or
+an object with the following attributes:
+
+- minLength - minimum number of elements (use with `{ isRequired: true }`)
+- maxLength - maximum number of elements
+- element - validation specification for elements inside the array
+
+
+```
+{
+  content: {
+    comments: {
+        isArray: true
+    },
+    emailAddresses: {
+        isRequired: true,
+        isArray: {
+            minLength: 1,
+            maxLength: 10,
+            element: { isEmail: true }
+        }
+    }
+  }
+}
+```
+
+### isObject
+
+Validates that the specified value is an object.  It can take a boolean value or
+and object with the following attributes:
+
+- properties: validation specification for the contents of the object
+
+```
+{
+    content: {
+        data: {
+            isObject: true
+        },
+        person: {
+            isRequired: true,
+            isObject: {
+                properties: {
+                    first: { isRequired: true },
+                    last: { isRequired: true },
+                    middle: { isRequired: false },
+                    address: {
+                        isObject: {
+                            properties: {
+                                street: { isRequired: true },
+                                city: { isRequired: true },
+                                state: { isRequired: true }
+                            }
+                        }
+                    },
+                    emails: {
+                        isArray: {
+                            maxLength: 5,
+                            element: { isEmail: true }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+```
 
 ## Conditional validations
 All validation parameters are able to deal with functions as parameters.
