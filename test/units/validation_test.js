@@ -22,6 +22,7 @@
  * THE SOFTWARE.
  */
 var index = require('../../lib/index');
+var _ = require('lodash');
 var sinon = require('sinon');
 
 var options = {};
@@ -350,6 +351,262 @@ describe('Validation', function () {
             checkValid.length.should.equal(0);
 
             done();
+        });
+
+        describe('isArray', function() {
+            var validationReq;
+
+            beforeEach(function() {
+                validationReq = {
+                    body: {
+                        numArr: [1, 2, 34],
+                        numArrNull: [1, 2, null, 34],
+                        strVal: "I'm just a string"
+                    }
+                };
+            });
+
+            it('accept array when true', function () {
+                var validationModel = {
+                    content: {
+                        numArrNull: {isArray: true}
+                    }
+                };
+                var checkInvalid = index.validation.process(validationModel, validationReq, {errorsAsArray: true});
+                checkInvalid.length.should.equal(0);
+            });
+
+            it('reject non-array when true', function () {
+                var validationModel = {
+                    content: {
+                        strVal: {isArray: true}
+                    }
+                };
+                var checkInvalid = index.validation.process(validationModel, validationReq, {errorsAsArray: true});
+                checkInvalid.length.should.equal(1);
+                checkInvalid[0].reason.should.equal('Field is not array');
+                checkInvalid[0].type.should.equal('INVALID');
+            });
+
+            it('reject array when false', function () {
+                var validationModel = {
+                    content: {
+                        numArr: {isArray: false}
+                    }
+                };
+                var checkInvalid = index.validation.process(validationModel, validationReq, {errorsAsArray: true});
+                checkInvalid.length.should.equal(1);
+                checkInvalid[0].reason.should.equal('Field is an array');
+                checkInvalid[0].type.should.equal('INVALID');
+            });
+
+            it('validate minLength', function () {
+                var validationModel = {
+                    content: {
+                        numArr: {isArray: {}}
+                    }
+                };
+
+                validationModel.content.numArr.isArray.minLength = 1;
+                var checkInvalidLength = index.validation.process(validationModel, validationReq, {errorsAsArray: true});
+                checkInvalidLength.length.should.equal(0);
+
+                validationModel.content.numArr.isArray.minLength = 5;
+                var checkTooShorts = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+                checkTooShorts.length.should.equal(1);
+                checkTooShorts[0].reason.should.equal('Not enough elements');
+                checkTooShorts[0].type.should.equal('INVALID');
+
+                delete validationReq.body.numArr;
+                var checkMissing = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+                checkMissing.length.should.equal(0);
+            });
+
+            it('validate maxLength', function () {
+                var validationModel = {
+                    content: {
+                        numArr: {isArray: {}}
+                    }
+                };
+
+                validationModel.content.numArr.isArray.maxLength = 10;
+                var checkInvalidValidLength = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+                checkInvalidValidLength.length.should.equal(0);
+
+                validationModel.content.numArr.isArray.maxLength = 2;
+                var checkTooLong = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+                checkTooLong.length.should.equal(1);
+                checkTooLong[0].reason.should.equal('Too many elements');
+                checkTooLong[0].type.should.equal('INVALID');
+
+                delete validationReq.body.numArr;
+                var checkMissing = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+                checkMissing.length.should.equal(0);
+            });
+
+            it('validate array elements', function () {
+                var validationReq = {
+                    body: {
+                        numbers: [1, 5, 67],
+                        numbersInvalid: [1, 5, "a", 67, "b"],
+                        numbersAndNull: [1, 5, null, 67]
+                    }
+                };
+
+                var checkInvalidNumbersInvalid = index.validation.process({
+                    content: {
+                        numbersInvalid: {
+                            isArray: {
+                                element: {
+                                    isInt: true
+                                }
+                            }
+                        }
+                    }
+                }, validationReq, {errorsAsArray: true});
+                checkInvalidNumbersInvalid.length.should.equal(1);
+                checkInvalidNumbersInvalid[0].reason.should.equal('Invalid integer');
+                checkInvalidNumbersInvalid[0].type.should.equal('INVALID');
+                checkInvalidNumbersInvalid[0].field.should.equal('numbersInvalid[2]');
+
+                var checkInvalidNumbersAndNulls = index.validation.process({
+                    content: {
+                        numbersAndNull: {
+                            isArray: {
+                                element: {
+                                    isInt: true
+                                }
+                            }
+                        }
+                    }
+                }, validationReq, {errorsAsArray: true});
+                checkInvalidNumbersAndNulls.length.should.equal(1);
+                checkInvalidNumbersAndNulls[0].reason.should.equal('Invalid integer');
+                checkInvalidNumbersAndNulls[0].type.should.equal('INVALID');
+                checkInvalidNumbersAndNulls[0].field.should.equal('numbersAndNull[2]');
+            });
+
+        });
+
+        describe('isObject', function () {
+            var validationReq = {
+                body: {
+                    person: {
+                        name: "Bob",
+                        age: 50,
+                        preferences: {
+                            favoriteNumber: -333
+                        }
+                    },
+                    strVal: "I'm just a string",
+                    arrVal: [123, "bob"]
+                }
+            };
+
+            it('accept object when true', function () {
+                var validationModel = {
+                    content: {
+                        person: {isObject: true}
+                    }
+                };
+                var checkInvalid = index.validation.process(validationModel, validationReq, {errorsAsArray: true});
+                checkInvalid.length.should.equal(0);
+            });
+
+            it('reject non-object when true', function () {
+                var checkInvalidString = index.validation.process({content: {strVal: {isObject: true}}}, validationReq, {errorsAsArray: true});
+                checkInvalidString.length.should.equal(1);
+                checkInvalidString[0].reason.should.equal('Field is not object');
+                checkInvalidString[0].type.should.equal('INVALID');
+                checkInvalidString[0].field.should.equal('strVal');
+
+                var checkInvalidArray = index.validation.process({content: {arrVal: {isObject: true}}}, validationReq, {errorsAsArray: true});
+                checkInvalidArray.length.should.equal(1);
+                checkInvalidArray[0].reason.should.equal('Field is not object');
+                checkInvalidArray[0].type.should.equal('INVALID');
+                checkInvalidArray[0].field.should.equal('arrVal');
+            });
+
+            it('reject object when false', function () {
+                var validationModel = {
+                    content: {
+                        person: {isObject: false}
+                    }
+                };
+                var checkInvalid = index.validation.process(validationModel, validationReq, {errorsAsArray: true});
+                checkInvalid.length.should.equal(1);
+                checkInvalid[0].reason.should.equal('Field is an object');
+                checkInvalid[0].type.should.equal('INVALID');
+            });
+
+            it('validate properties', function () {
+                var validationModel = {
+                    content: {
+                        person: {
+                            isRequired: true,
+                            isObject: {
+                                properties: {
+                                    name: {
+                                        isRequired: true
+                                    },
+                                    age: {
+                                        isRequired: true,
+                                        isNatural: true
+                                    },
+                                    preferences: {
+                                        isObject: {
+                                            properties: {
+                                                favoriteNumber: {
+                                                    isRequired: true,
+                                                    isInt: true
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                };
+
+                var tests = [{
+                    prepare: function (request) {
+                        delete request.body.person;
+                    },
+                    expected: {type: 'MISSING', field: 'person'}
+                }, {
+                    prepare: function (request) {
+                        delete request.body.person.name;
+                    },
+                    expected: {type: 'MISSING', field: 'person.name'}
+                }, {
+                    prepare: function (request) {
+                        delete request.body.person.age;
+                    },
+                    expected: {type: 'MISSING', field: 'person.age'}
+                }, {
+                    prepare: function (request) {
+                        request.body.person.age = -5;
+                    },
+                    expected: {type: 'INVALID', field: 'person.age'}
+                }, {
+                    prepare: function (request) {
+                        request.body.person.preferences.favoriteNumber = "not a number";
+                    },
+                    expected: {type: 'INVALID', field: 'person.preferences.favoriteNumber'}
+                }];
+
+                _.forEach(tests, function (test) {
+                    var request = JSON.parse(JSON.stringify(validationReq));
+                    test.prepare(request);
+
+                    var checkInvalid = index.validation.process(validationModel, request, {errorsAsArray: true});
+                    checkInvalid.length.should.equal(1);
+                    checkInvalid[0].type.should.equal(test.expected.type);
+                    checkInvalid[0].field.should.equal(test.expected.field);
+                });
+            });
+
         });
     });
 });
