@@ -353,52 +353,57 @@ describe('Validation', function () {
         });
 
         describe('isArray', function() {
-            var validationReq = { body: {
+            var validationReq = {
+                body: {
                     numArr: [1, 2, 34],
                     numArrNull: [1, 2, null, 34],
                     strVal: "I'm just a string"
                 }
             };
 
-            it ('should accept array when true', function() {
-                var validationModel = { content: {
-                        numArrNull: { isArray: true }
+            it('accept array when true', function () {
+                var validationModel = {
+                    content: {
+                        numArrNull: {isArray: true}
                     }
                 };
-                var checkInvalid = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+                var checkInvalid = index.validation.process(validationModel, validationReq, {errorsAsArray: true});
                 checkInvalid.length.should.equal(0);
             });
 
-            it ('should reject non-array when true', function() {
-                var validationModel = { content: {
-                        strVal: { isArray: true }
+            it('reject non-array when true', function () {
+                var validationModel = {
+                    content: {
+                        strVal: {isArray: true}
                     }
                 };
-                var checkInvalid = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+                var checkInvalid = index.validation.process(validationModel, validationReq, {errorsAsArray: true});
                 checkInvalid.length.should.equal(1);
                 checkInvalid[0].reason.should.equal('Field is not array');
                 checkInvalid[0].type.should.equal('INVALID');
             });
 
-            it ('should reject array when false', function() {
-                var validationModel = { content: {
-                        numArr: { isArray: false }
+            it('reject array when false', function () {
+                var validationModel = {
+                    content: {
+                        numArr: {isArray: false}
                     }
                 };
-                var checkInvalid = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+                var checkInvalid = index.validation.process(validationModel, validationReq, {errorsAsArray: true});
                 checkInvalid.length.should.equal(1);
                 checkInvalid[0].reason.should.equal('Field is an array');
                 checkInvalid[0].type.should.equal('INVALID');
             });
 
-            it ('should validate minLength', function() {
-                var validationModel = { content: {
-                        numArr: { isArray: {} }
+            it('validate minLength', function () {
+                var validationModel = {
+                    content: {
+                        numArr: {isArray: {}}
                     }
                 };
 
                 validationModel.content.numArr.isArray.minLength = 1;
-                var checkInvalidOk = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+                var checkInvalidOk = index.validation.process(validationModel, validationReq, {errorsAsArray: true});
                 checkInvalidOk.length.should.equal(0);
 
                 validationModel.content.numArr.isArray.minLength = 5;
@@ -408,9 +413,10 @@ describe('Validation', function () {
                 checkInvalidFail[0].type.should.equal('INVALID');
             });
 
-            it ('should validate maxLength', function() {
-                var validationModel = { content: {
-                        numArr: { isArray: {} }
+            it('validate maxLength', function () {
+                var validationModel = {
+                    content: {
+                        numArr: {isArray: {}}
                     }
                 };
 
@@ -424,43 +430,55 @@ describe('Validation', function () {
                 checkInvalidFail[0].reason.should.equal('Too many elements');
                 checkInvalidFail[0].type.should.equal('INVALID');
             });
+
         });
 
-        describe('isObject', function() {
-            var validationReq = { body: {
-                    objVal: { name: "Bob" },
+        describe('isObject', function () {
+            var validationReq = {
+                body: {
+                    person: {
+                        name: "Bob",
+                        age: 50,
+                        preferences: {
+                            favoriteNumber: -333
+                        }
+                    },
                     strVal: "I'm just a string",
                     arrVal: [123, "bob"]
                 }
             };
 
-            it ('accept object when true', function() {
-                var validationModel = { content: {
-                        objVal: { isObject: true }
+            it('accept object when true', function () {
+                var validationModel = {
+                    content: {
+                        person: {isObject: true}
                     }
                 };
-                var checkInvalid = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+                var checkInvalid = index.validation.process(validationModel, validationReq, {errorsAsArray: true});
                 checkInvalid.length.should.equal(0);
             });
 
-            it ('reject non-object when true', function() {
-                var checkInvalidString = index.validation.process({ content: { strVal: { isObject: true } } }, validationReq, { errorsAsArray: true });
+            it('reject non-object when true', function () {
+                var checkInvalidString = index.validation.process({content: {strVal: {isObject: true}}}, validationReq, {errorsAsArray: true});
                 checkInvalidString.length.should.equal(1);
                 checkInvalidString[0].reason.should.equal('Field is not object');
                 checkInvalidString[0].type.should.equal('INVALID');
+                checkInvalidString[0].field.should.equal('strVal');
 
-                var checkInvalidArray = index.validation.process({ content: { arrVal: { isObject: true } } }, validationReq, { errorsAsArray: true });
+                var checkInvalidArray = index.validation.process({content: {arrVal: {isObject: true}}}, validationReq, {errorsAsArray: true});
                 checkInvalidArray.length.should.equal(1);
                 checkInvalidArray[0].reason.should.equal('Field is not object');
                 checkInvalidArray[0].type.should.equal('INVALID');
+                checkInvalidArray[0].field.should.equal('arrVal');
             });
 
-            it ('reject object when false', function() {
-                var validationModel = { content: {
-                        objVal: { isObject: false }
+            it('reject object when false', function () {
+                var validationModel = {
+                    content: {
+                        person: {isObject: false}
                     }
                 };
-                var checkInvalid = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+                var checkInvalid = index.validation.process(validationModel, validationReq, {errorsAsArray: true});
                 checkInvalid.length.should.equal(1);
                 checkInvalid[0].reason.should.equal('Field is an object');
                 checkInvalid[0].type.should.equal('INVALID');
