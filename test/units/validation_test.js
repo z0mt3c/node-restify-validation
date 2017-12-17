@@ -353,13 +353,17 @@ describe('Validation', function () {
         });
 
         describe('isArray', function() {
-            var validationReq = {
-                body: {
-                    numArr: [1, 2, 34],
-                    numArrNull: [1, 2, null, 34],
-                    strVal: "I'm just a string"
-                }
-            };
+            var validationReq;
+
+            beforeEach(function() {
+                validationReq = {
+                    body: {
+                        numArr: [1, 2, 34],
+                        numArrNull: [1, 2, null, 34],
+                        strVal: "I'm just a string"
+                    }
+                };
+            });
 
             it('accept array when true', function () {
                 var validationModel = {
@@ -403,14 +407,18 @@ describe('Validation', function () {
                 };
 
                 validationModel.content.numArr.isArray.minLength = 1;
-                var checkInvalidOk = index.validation.process(validationModel, validationReq, {errorsAsArray: true});
-                checkInvalidOk.length.should.equal(0);
+                var checkInvalidLength = index.validation.process(validationModel, validationReq, {errorsAsArray: true});
+                checkInvalidLength.length.should.equal(0);
 
                 validationModel.content.numArr.isArray.minLength = 5;
-                var checkInvalidFail = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
-                checkInvalidFail.length.should.equal(1);
-                checkInvalidFail[0].reason.should.equal('Not enough elements');
-                checkInvalidFail[0].type.should.equal('INVALID');
+                var checkTooShorts = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+                checkTooShorts.length.should.equal(1);
+                checkTooShorts[0].reason.should.equal('Not enough elements');
+                checkTooShorts[0].type.should.equal('INVALID');
+
+                delete validationReq.body.numArr;
+                var checkMissing = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+                checkMissing.length.should.equal(0);
             });
 
             it('validate maxLength', function () {
@@ -421,14 +429,18 @@ describe('Validation', function () {
                 };
 
                 validationModel.content.numArr.isArray.maxLength = 10;
-                var checkInvalidOk = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
-                checkInvalidOk.length.should.equal(0);
+                var checkInvalidValidLength = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+                checkInvalidValidLength.length.should.equal(0);
 
                 validationModel.content.numArr.isArray.maxLength = 2;
-                var checkInvalidFail = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
-                checkInvalidFail.length.should.equal(1);
-                checkInvalidFail[0].reason.should.equal('Too many elements');
-                checkInvalidFail[0].type.should.equal('INVALID');
+                var checkTooLong = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+                checkTooLong.length.should.equal(1);
+                checkTooLong[0].reason.should.equal('Too many elements');
+                checkTooLong[0].type.should.equal('INVALID');
+
+                delete validationReq.body.numArr;
+                var checkMissing = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+                checkMissing.length.should.equal(0);
             });
 
         });
