@@ -85,7 +85,8 @@ describe('Validators', function () {
         test('isAlphanumeric', true, 'a1', 'a1!');
     });
     it('node-validator isNumeric', function () {
-        test('isNumeric', true, '1', 'asd');
+        test('isNumeric', true, ['1', '-1', '123'], ['asd', '123.4']);
+        test('isNumeric', true, [1, -1, 123], [false, 123.4]);
     });
     it('node-validator isHexadecimal', function () {
         test('isHexadecimal', true, 'df', 'w');
@@ -96,13 +97,15 @@ describe('Validators', function () {
     it('node-validator isBoolean', function () {
         test('isBoolean', true, 'false', '0');
         test('isBoolean', true, 'true', '1');
+        test('isBoolean', true, [true, false], [0, 1, 'FALSE', 'TRUE']);
     });
     it('node-validator isInt', function () {
-        test('isInt', true, '123', 'a1');
+        test('isInt', true, ['123'], ['a1', '123.4']);
+        test('isInt', true, [-123, 0, 123], [-123.4, 0.5, 123.4]);
     });
     it('node-validator isNatural', function () {
-        test('isNatural', true, '123', 'a1');
-        test('isNatural', true, '123', '-123');
+        test('isNatural', true, ['0', '123'], ['a1', '-123.4', '123.4']);
+        test('isNatural', true, [0, 123], [-123, -123.4, 0.5, 123.4]);
     });
     it('node-validator isLowercase', function () {
         test('isLowercase', true, 'abc', 'aBc');
@@ -112,9 +115,11 @@ describe('Validators', function () {
     });
     it('node-validator isDecimal', function () {
         test('isDecimal', true, '0.5', '0,5');
+        test('isDecimal', true, [-123, -1, 0.5, -123.4, 123], [false]);
     });
     it('node-validator isFloat', function () {
         test('isFloat', true, '0.5', '0,5');
+        test('isDecimal', true, [-123, -1, 0.5, -123.4, 123], [false]);
     });
     it('node-validator equals', function () {
         test('equals', 'foobar', 'foobar', 'foobar2');
