@@ -284,9 +284,10 @@ The request `resource`, `query` and `headers` contain string values, even though
 be representing numbers, booleans, Dates or other types.
 
 An optional `model` property can be specified to transform the request value to a specific type.
-When validation of a property succeeds and a `model` is specified, the original request value is replaced with the transformed value.
+When validation of a property succeeds and a `model` is specified, the original request value
+is replaced with the transformed value.
 
-```javasecript
+```javascript
 // Creates an instance of date from a numeric or string value
 function DateModel(value) {
     return new Date(Number(value) || value);
