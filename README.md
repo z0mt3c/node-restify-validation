@@ -278,6 +278,49 @@ As result the parameter will only be required when param1 matches a or b. The ca
 * options: the options which have initially been passed
 * recentErrors: errors which have been computed until now
 
+## Model
+
+The request `resource`, `query` and `headers` contain string values, even though they may
+be representing numbers, booleans, Dates or other types.
+
+An optional `model` property can be specified to transform the request value to a specific type.
+When validation of a property succeeds and a `model` is specified, the original request value
+is replaced with the transformed value.
+
+```javascript
+// Creates an instance of date from a numeric or string value
+function DateModel(value) {
+    return new Date(Number(value) || value);
+}
+
+server.get({url: '/search', validation: {
+    queries: {
+        text: { isRequired: true },
+        from: { model: DateModel },
+        to: { model: DateModel },
+        summary: { isBoolean, model: Boolean },
+        page: { isNumber: true, model: Number }
+    }
+}, function (req, res, next) {
+    console.log("Query:", JSON.stringify(req.query));
+    res.send(req.query);
+}))
+```
+
+When handling the request `GET /search?text=Hello&from=2017-12-1&to=1514678400000&summary=true&page=3`,
+the query property types will be `string`, `number`, `Date`, `Date` and `number`, respectively
+and the following will be logged:
+
+```
+Query: {"text":"Hello","from":"2017-12-01T06:00:00.000Z","to":"2017-12-31T00:00:00.000Z","summary":true,"page":3}
+```
+
+Without specifying the `model` settings, the query property types would have been strings and the following would
+have been logged:
+
+```
+Query: {"text":"Hello","from":"2017-12-1","to":"1514678400000","summary":"true","page":"3"}
+```
 
 ## Inspiration
 node-restify-validation was & is inspired by [backbone.validation](https://github.com/thedersen/backbone.validation).
