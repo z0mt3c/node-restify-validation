@@ -278,7 +278,7 @@ As result the parameter will only be required when param1 matches a or b. The ca
 * options: the options which have initially been passed
 * recentErrors: errors which have been computed until now
 
-## Model
+## Models
 
 The request `resource`, `query` and `headers` contain string values, even though they may
 be representing numbers, booleans, Dates or other types.
@@ -299,7 +299,7 @@ server.get({url: '/search', validation: {
         from: { model: DateModel },
         to: { model: DateModel },
         summary: { isBoolean, model: Boolean },
-        page: { isNumber: true, model: Number }
+        page: { isNatural: true, model: Number }
     }
 }, function (req, res, next) {
     console.log("Query:", JSON.stringify(req.query));
@@ -322,10 +322,47 @@ have been logged:
 Query: {"text":"Hello","from":"2017-12-1","to":"1514678400000","summary":"true","page":"3"}
 ```
 
+### Validator Models
+
+To avoid having to specify models in your validation configurations, you can
+configure models to be automatically applied based on the validator.
+
+```javascript
+server.use(restifyValidation.validationPlugin({
+    validatorModels: {
+        isInt: Number
+    }
+}));
+```
+
+When you specify the standard `restifyValidation.validatorModels`, it will supply models
+for the following validators:
+
+- isBoolean - converts value to `boolean`
+- isDate - converts value to `Date`
+- isDecimal - converts value to `number`
+- isDivisibleBy - converts value to `number`
+- isFloat - converts value to `number`
+- isInt - converts value to `number`
+- isNatural - converts value to `number`
+
+The `validatorModels` configuration can also take an array of settings.
+The following example uses `restifyValidation.validatorModels` but then overrides
+the model for the `isDate` validator to map values to `moment` rather than to `Date`.
+
+```javascript
+var moment = require('moment');
+server.use(restifyValidation.validationPlugin({
+    validatorModels: [
+        restifyValidation.validatorModels,
+        { isDate: moment }
+    ]
+}));
+```
+
 ## Inspiration
 node-restify-validation was & is inspired by [backbone.validation](https://github.com/thedersen/backbone.validation).
 In terms of validation node-restify-validation makes use of [node-validator](https://github.com/chriso/node-validator).
-
 
 ## License
 The MIT License (MIT)
