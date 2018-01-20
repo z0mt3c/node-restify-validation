@@ -210,6 +210,36 @@ describe('Validators', function () {
         }]]);
     });
 
+    it('isDictionary', function() {
+        test('isDictionary', false, [123, 'string', [123]], [{}, {a: 123}, {a:'string', b:123, c:false}]);
+        test('isDictionary', true, [{}, {a:123}, {a:'string', b:123, c:false}, {a:123, b:'string'}], [123, [123], 'abc']);
+        test('isDictionary', { minLength: 2 }, [{a:1,b:2}, {a:1, b:2, c:3}], [123, {}, {a:123}]);
+        test('isDictionary', { maxLength: 3 }, [{}, {a:1}, {a:1, b:2, c:3}], [123, {a:1,b:2,c:3,d:4}]);
+        test('isDictionary', { key: { isIn: ['a', 'b'] } }, [{}, {a:1}, {a:1, b:2}], [{a:'a',d:'b'}, {c:-1}]);
+        test('isDictionary', { value: { isNatural: true } }, [{}, {a:1}, {a:1, b:2, c:3}], [{a:'a'}, {a:-1}]);
+        var validationModel = {
+            key: { isEmail: true },
+            value: {
+                isObject: {
+                    properties: {
+                        name: { isRequired: true },
+                        age: { isNatural: true, isRequired: false }
+                    }
+                }
+            }
+        };
+        test('isDictionary', validationModel, [{
+            'a@example.com': { name: "Alice" },
+            'b@example.com': { name: "Bob", age: 33 }
+        }], [{
+            'a@example.com': 'a'
+        }, {
+            'a@example.com': { name: "Alice", age: -5 }
+        }, {
+            'not an email': { name: "Bob", age: 33 }
+        }]);
+    });
+
     it('isObject', function() {
         test('isObject', false, [123, 'string', [123]], [{}, {name:"bob"}]);
         test('isObject', true, [{}, {name:"bob"}], [123, 'string', [123]]);

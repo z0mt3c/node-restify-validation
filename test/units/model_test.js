@@ -41,7 +41,12 @@ describe('Model', function () {
             body: {
                 from: timeStamp.toISOString(),
                 to: timeStamp.valueOf(),
-                ts: String(timeStamp.valueOf())
+                ts: String(timeStamp.valueOf()),
+                dict: {
+                    'First': 'January',
+                    'Second': 'February',
+                    'Third': 'March'
+                }
             }
         };
     });
@@ -255,9 +260,20 @@ describe('Model', function () {
                 content: {
                     from: {model: DateModel},
                     to: {model: DateModel},
-                    ts: {model: DateModel}
+                    ts: {model: DateModel},
+                    dict: {
+                        isDictionary: {
+                            key: { model: function(s) { return s.toLowerCase(); }},
+                            value: { model: function(s) { return s.toUpperCase(); }}
+                        }
+                    }
                 }
             };
+
+            // Keys should become lower case
+            var expectedDictionaryKeys = _.map(_.keys(validationReq.body.dict), function(s) { return s.toLowerCase(); });
+            // Values should become upper case
+            var expectedDictionaryValues = _.map(_.values(validationReq.body.dict), function(s) { return s.toUpperCase(); });
 
             var validationResult = index.validation.process(validationModel, validationReq, {
                 errorsAsArray: true,
@@ -274,6 +290,8 @@ describe('Model', function () {
             validationReq.body.from.should.deepEqual(timeStamp);
             validationReq.body.to.should.deepEqual(timeStamp);
             validationReq.body.ts.should.deepEqual(timeStamp);
+            _.keys(validationReq.body.dict).should.deepEqual(expectedDictionaryKeys);
+            _.values(validationReq.body.dict).should.deepEqual(expectedDictionaryValues);
         });
     });
 

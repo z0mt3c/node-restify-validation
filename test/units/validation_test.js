@@ -488,6 +488,190 @@ describe('Validation', function () {
 
         });
 
+        describe('isDictionary', function() {
+            var validationReq;
+
+            beforeEach(function() {
+                validationReq = {
+                    body: {
+                        numDict: {
+                            a: 1,
+                            b: 2,
+                            c: 34
+                        },
+                        numDictNull: {
+                            a: 1,
+                            b: 2,
+                            c: null,
+                            d: 34
+                        },
+                        numArr: [1, 2, 34],
+                        numArrNull: [1, 2, null, 34],
+                        strVal: "I'm just a string"
+                    }
+                };
+            });
+
+            it('accept object when true', function () {
+                var validationModel = {
+                    content: {
+                        numDictNull: {isDictionary: true}
+                    }
+                };
+                var checkInvalid = index.validation.process(validationModel, validationReq, {errorsAsArray: true});
+                checkInvalid.length.should.equal(0);
+            });
+
+            it('reject non-object when true', function () {
+                var validationModel = {
+                    content: {
+                        strVal: {isDictionary: true}
+                    }
+                };
+                var checkInvalid = index.validation.process(validationModel, validationReq, {errorsAsArray: true});
+                checkInvalid.length.should.equal(1);
+                checkInvalid[0].reason.should.equal('Field is not object');
+                checkInvalid[0].type.should.equal('INVALID');
+            });
+
+            it('reject object when false', function () {
+                var validationModel = {
+                    content: {
+                        numDict: {isDictionary: false}
+                    }
+                };
+                var checkInvalid = index.validation.process(validationModel, validationReq, {errorsAsArray: true});
+                checkInvalid.length.should.equal(1);
+                checkInvalid[0].reason.should.equal('Field is an object');
+                checkInvalid[0].type.should.equal('INVALID');
+            });
+
+            it('validate minLength', function () {
+                var validationModel = {
+                    content: {
+                        numDict: {isDictionary: {}}
+                    }
+                };
+
+                validationModel.content.numDict.isDictionary.minLength = 1;
+                var checkInvalidLength = index.validation.process(validationModel, validationReq, {errorsAsArray: true});
+                checkInvalidLength.length.should.equal(0);
+
+                validationModel.content.numDict.isDictionary.minLength = 5;
+                var checkTooShorts = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+                checkTooShorts.length.should.equal(1);
+                checkTooShorts[0].reason.should.equal('Not enough elements');
+                checkTooShorts[0].type.should.equal('INVALID');
+
+                delete validationReq.body.numDict;
+                var checkMissing = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+                checkMissing.length.should.equal(0);
+            });
+
+            it('validate maxLength', function () {
+                var validationModel = {
+                    content: {
+                        numDict: {isDictionary: {}}
+                    }
+                };
+
+                validationModel.content.numDict.isDictionary.maxLength = 10;
+                var checkInvalidValidLength = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+                checkInvalidValidLength.length.should.equal(0);
+
+                validationModel.content.numDict.isDictionary.maxLength = 2;
+                var checkTooLong = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+                checkTooLong.length.should.equal(1);
+                checkTooLong[0].reason.should.equal('Too many elements');
+                checkTooLong[0].type.should.equal('INVALID');
+
+                delete validationReq.body.numDict;
+                var checkMissing = index.validation.process(validationModel, validationReq, { errorsAsArray: true });
+                checkMissing.length.should.equal(0);
+            });
+
+            it('validate dictionary keys', function () {
+                var validationReq = {
+                    body: {
+                        letters: { a: 1, b: 2, c: 3, d: 4 },
+                        vowels: { a: 1, e: 2, i: 3 }
+                    }
+                };
+
+                var checkValidKeys = index.validation.process({
+                    content: {
+                        vowels: {
+                            isDictionary: {
+                                key: {
+                                    isIn: ['a', 'e', 'i', 'o', 'u']
+                                }
+                            }
+                        }
+                    }
+                }, validationReq, {errorsAsArray: true});
+                checkValidKeys.length.should.equal(0);
+
+                var checkInvalidKeysInvalid = index.validation.process({
+                    content: {
+                        letters: {
+                            isDictionary: {
+                                key: {
+                                    isIn: ['a', 'e', 'i', 'o', 'u']
+                                }
+                            }
+                        }
+                    }
+                }, validationReq, {errorsAsArray: true});
+                checkInvalidKeysInvalid.length.should.equal(1);
+                checkInvalidKeysInvalid[0].reason.should.equal('Unexpected value or invalid argument');
+                checkInvalidKeysInvalid[0].type.should.equal('INVALID');
+                checkInvalidKeysInvalid[0].field.should.equal('letters(key:"b")');
+            });
+
+            it('validate dictionary values', function () {
+                var validationReq = {
+                    body: {
+                        numbers: { a: 1, b: 5, c: 67 },
+                        numbersInvalid: { a: 1, b: 5, c: "a", d: 67, e: "b" },
+                        numbersAndNull: { a: 1, b: 5, c: null, d: 67 }
+                    }
+                };
+
+                var checkInvalidNumbersInvalid = index.validation.process({
+                    content: {
+                        numbersInvalid: {
+                            isDictionary: {
+                                value: {
+                                    isInt: true
+                                }
+                            }
+                        }
+                    }
+                }, validationReq, {errorsAsArray: true});
+                checkInvalidNumbersInvalid.length.should.equal(1);
+                checkInvalidNumbersInvalid[0].reason.should.equal('Invalid integer');
+                checkInvalidNumbersInvalid[0].type.should.equal('INVALID');
+                checkInvalidNumbersInvalid[0].field.should.equal('numbersInvalid["c"]');
+
+                var checkInvalidNumbersAndNulls = index.validation.process({
+                    content: {
+                        numbersAndNull: {
+                            isDictionary: {
+                                value: {
+                                    isInt: true
+                                }
+                            }
+                        }
+                    }
+                }, validationReq, {errorsAsArray: true});
+                checkInvalidNumbersAndNulls.length.should.equal(1);
+                checkInvalidNumbersAndNulls[0].reason.should.equal('Invalid integer');
+                checkInvalidNumbersAndNulls[0].type.should.equal('INVALID');
+                checkInvalidNumbersAndNulls[0].field.should.equal('numbersAndNull["c"]');
+            });
+
+        });
+
         describe('isObject', function () {
             var validationReq = {
                 body: {
