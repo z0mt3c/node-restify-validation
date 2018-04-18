@@ -244,6 +244,38 @@ and object with the following attributes:
 }
 ```
 
+### isDictionary
+
+Validates that specified value is a dictionary.  It can take a boolean value or
+an object with the following attributes:
+
+- minLength - minimum number of elements (use with `{ isRequired: true }`)
+- maxLength - maximum number of elements
+- key - validation specification for the dictionary keys
+- value - validation specification for the dictionary values
+
+
+```
+{
+  content: {
+    users: {
+        isDictionary: {
+            minLength: 1,
+            maxLength: 10,
+            key: { isEmail: true },
+            value: {
+                isObject: {
+                    name: { isRequired: true },
+                    phone: { isRequired: true },
+                    year: { isInt: true }
+                }
+            }
+        }
+    }
+  }
+}
+```
+
 ## Conditional validations
 All validation parameters are able to deal with functions as parameters.
 
