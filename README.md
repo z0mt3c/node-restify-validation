@@ -1,4 +1,7 @@
 # node-restify-validation
+```diff
+-Maintener wanted
+```
 Validation for REST Services built with [node-restify](https://github.com/mcavage/node-restify) in node.js
 
 [![Build Status](https://travis-ci.org/gchauvet/node-restify-validation.png)](https://travis-ci.org/gchauvet/node-restify-validation)
