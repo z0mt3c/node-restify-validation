@@ -1,12 +1,12 @@
 # node-restify-validation
-```diff
--Maintener wanted
-```
+
 Validation for REST Services built with [node-restify](https://github.com/mcavage/node-restify) in node.js
 
-[![Build Status](https://travis-ci.org/gchauvet/node-restify-validation.png)](https://travis-ci.org/gchauvet/node-restify-validation)
+![Travis](https://img.shields.io/travis/andrewzey/node-restify-validation.svg)
 [![Coverage Status](https://coveralls.io/repos/gchauvet/node-restify-validation/badge.png?branch=master)](https://coveralls.io/r/gchauvet/node-restify-validation?branch=master)
-[![Dependency Status](https://gemnasium.com/gchauvet/node-restify-validation.png)](https://gemnasium.com/gchauvet/node-restify-validation)
+![NPM-Version](https://img.shields.io/npm/v/node-restify-validation.svg)
+![NPM-Downloads](https://img.shields.io/npm/dm/node-restify-validation.svg)
+
 
 ## Requirements
 * node-restify-validation requires at least restify 2.6.0 since the validation model is defined in the route-object. (https://github.com/mcavage/node-restify/pull/408)
