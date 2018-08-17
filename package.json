@@ -29,15 +29,15 @@
   "main": "lib/index",
   "readmeFilename": "README.md",
   "dependencies": {
-    "lodash": "3.10.x",
+    "lodash": "^4.17.10",
     "validator": "3.22.x"
   },
   "devDependencies": {
+    "coveralls": "^3.0.2",
+    "mocha": "^5.2.0",
     "restify": ">=2.8.1 <5.0.0",
-    "mocha": "3.1.x",
-    "sinon": "1.11.x",
     "should": "11.1.x",
-    "supertest": "2.0.x",
-    "coveralls": "2.12.x"
+    "sinon": "1.11.x",
+    "supertest": "^3.1.0"
   }
 }
