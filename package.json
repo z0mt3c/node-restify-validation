@@ -16,7 +16,10 @@
     "restify",
     "validation"
   ],
-
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/z0mt3c/node-restify-validation.git"
+  },
   "bugs": {
     "url": "https://github.com/z0mt3c/node-restify-validation/issues"
   },
