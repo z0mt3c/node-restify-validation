@@ -29,7 +29,7 @@
   "main": "lib/index",
   "readmeFilename": "README.md",
   "dependencies": {
-    "lodash": "3.10.x",
+    "lodash": "4.17.x",
     "validator": "3.22.x"
   },
   "devDependencies": {
