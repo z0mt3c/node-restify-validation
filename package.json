@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "restify": ">=2.8.1 <5.0.0",
+    "restify7": "npm:restify@7.2.1",
     "mocha": "3.1.x",
     "sinon": "1.11.x",
     "should": "11.1.x",
